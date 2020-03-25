@@ -1,0 +1,153 @@
+{% extends 'commonapp/website_base.html' %} 
+{% load data_load %}
+{% block body %}
+    <section class="home_page_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <form action="{% url 'commonapp:search_poor' %}" method="POST"> {% csrf_token %}
+                        <div class="search_bar_area">
+                            <div class="search_bar">
+                                <div class="search_box">
+                                    <input type="text" name="search" placeholder="Search by Name.." class="form-control">   
+                                </div>
+                                <div class="submit_area">
+                                    <div class="submit_btn">
+                                        <input type="submit" class="btn btn-success" value="Search">
+                                    </div>
+                                    <div class="fileter_icon">
+                                        <p><i class="fa fa-sliders" aria-hidden="true"></i></p>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="filter_item">
+                                <div class="single_search">
+                                    <select name="district" id="district" class="form-control">
+                                        <option value=""> Select District  </option>
+                                        
+                                        {% for dist in district_list %}  
+                                            <option value="{{dist.id}}">{{dist.district_name}}</option> 
+                                        {% endfor %}
+                                    </select>
+                                </div> 
+                                <div class="single_search"> 
+                                    <select name="city" id="city" class="form-control">
+                                        <option value="">Select City</option>  
+                                    </select>
+                                </div> 
+                                <div class="single_search">
+                                    <select id="help_cat" name="help_cat" class="form-control">
+                                        <option value="">Select Help Category</option>  
+                                            {% for item in help_category %} 
+                                                
+                                                {% if item.id == help_cat %}
+                                                    <option value="{{item.pk}}" selected>{{item}}</option> 
+                                                {% else %}
+                                                    <option value="{{item.id}}">{{item}}</option> 
+                                                {% endif %}
+                                                    
+                                            {% endfor %} 
+                                            
+                                    </select> 
+                                </div>
+                            </div> 
+                        </div> 
+                    </form>
+                    <div class="poor_times_area"> 
+                        <div class="row">
+                            
+                            {% if poor_search %} 
+                            <h2 style="display: block; width:100%;">Search Result</h2>
+                                {% for poor in poor_search %} 
+                                    <div class="col-sm-4">
+                                        <div class="single_poor single_item_home">  
+                                            <h1>{{poor.name}}</h1> 
+                                            <hr> 
+                                            <ul>
+                                                <li><strong>Mobile Number</strong>: <a href="tel:{{poor.mobile_number}}">{{poor.mobile_number}}</a></li>
+                                                <li><strong>District</strong>: {{poor.city_name.district}}</li>
+                                                <li><strong>City</strong>: {{poor.city_name}}</li>
+                                                <li><strong>Acount Required</strong>: {{poor.amount}}</li>
+                                                <li><strong>Amount Received</strong>: {{poor.amount_received}}</li>
+                                                <li><strong>Require Date</strong>: {{poor.require_date}}</li>
+                                                <li><strong>Amount Need</strong>: {{total_payments|make_payment:poor}}</li> 
+
+                                            </ul>
+                                            <div class="btn_area">
+                                                <ul>
+                                                    <li><a class="btn btn-success btn-sm float-left" href="{% url 'commonapp:single_poor_people' poor.id %}">View Application</a></li>
+                                                    <li><a class="btn btn-secondary btn-sm float-right" href="{% url 'poorapp:make_payment' poor.id %}">Make Payment</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %} 
+                                {% else %}
+                            
+                                <h2 style="color:red;display: block; width:100%;">No Result Found </h2>
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 home_sidebar">
+                    <div class="sidebar_homepage">
+                        <div class="single_sidebar_home">
+                            <h2>Top Donner</h2>
+                            <ul>
+                                {% for item in help_category %}
+                                    <li><a href="">{{item}}</a></li>
+                                {% endfor %} 
+                            </ul>
+                        </div>
+                        <div class="single_sidebar_home">
+                            <h2>Help Category</h2>
+                            <ul>
+                                {% for item in help_category %}
+                                    <li><a href="">{{item}}</a></li>
+                                {% endfor %} 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body %}
+{% block scripts %}
+<script type="text/javascript">
+    $('#district').change(function() {
+        var url = "/districtwise-city-search/";
+        $.ajax({
+            url: url,
+            data: {
+                'district_list': $('#district :selected').val(),
+            },
+            success: function(data) {
+                $("#city").html(data);
+            }
+        });
+    });
+</script>
+    <script>
+        $(document).ready(function(){  
+
+            var i = 0;
+            $('.fileter_icon p').click(function(){
+                if(i%2 == 0){
+                    $('.filter_item').css('top','0px'); 
+                    $('.filter_item').css('opacity','0'); 
+                    $('.filter_item').css('transition','all 0.5s');
+                    $('.filter_item').css('z-index','-1');
+                }
+                else{
+                    $('.filter_item').css('top','35px'); 
+                    $('.filter_item').css('opacity','1'); 
+                    $('.filter_item').css('transition','all 0.5s');
+                    $('.filter_item').css('z-index','999');
+                }
+                i++;
+            });
+        });
+    </script>
+{% endblock scripts %}
+    

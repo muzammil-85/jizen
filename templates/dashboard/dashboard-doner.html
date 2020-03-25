@@ -1,0 +1,46 @@
+{% extends 'dashboard-base.html' %}
+ 
+ {% block dashboard %}
+    <div class="message_afrea" style="padding-left:15px;margin-bottom:10px;">
+        {% if messages %} 
+            {% for message in messages %} 
+                <p style="color:red">{{message}}</p>
+            {% endfor %} 
+        {% endif %}
+    </div>
+     <div class="dashboard_area">
+         <div class="single_dashboard">
+             <a href="{% url 'poorapp:doner_profile' request.session.userid %}"><i class="fa fa-user" aria-hidden="true"></i> <span>View Profile</span>
+             </a>
+         </div>
+         <div class="single_dashboard">
+             <a href="{% url 'poorapp:doner_payment_search' request.session.userid %}"><i class="fa fa-credit-card" aria-hidden="true"></i> <span>Make Payment</span>
+             </a>
+         </div>
+         <div class="single_dashboard">
+             <a href=""><i class="fa fa-rocket" aria-hidden="true"></i> <span>View Transactions</span>
+             </a>
+         </div>
+         <div class="single_dashboard">
+             <a href=""><i class="fa fa-inbox" aria-hidden="true"></i> <span>Inbox</span>
+             </a>
+         </div>
+         <div class="single_dashboard">
+             <a href="{% url 'poorapp:doner_profile_update' request.session.userid %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <span>Update Profile</span>
+             </a>
+         </div>
+         <div class="single_dashboard">
+             <a href="{% url 'poorapp:doner_password_change' request.session.userid %}"><i class="fa fa-unlock" aria-hidden="true"></i> <span>Change Password</span>
+             </a>
+         </div>
+         <div class="single_dashboard">
+             <a href="{% url 'poorapp:doner_login_history' request.session.userid %}"><i class="fa fa-history" aria-hidden="true"></i> <span>Login History</span>
+             </a>
+         </div>
+         <div class="single_dashboard">
+             <a href=""><i class="fa fa-medkit" aria-hidden="true"></i> <span>Contact Support</span>
+             </a>
+         </div>
+     </div>
+ {% endblock dashboard %}
+     

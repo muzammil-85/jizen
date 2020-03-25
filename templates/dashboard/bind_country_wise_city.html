@@ -1,0 +1,4 @@
+<option value="">-----select-----</option>
+{% for data in city_list %}
+    <option value="{{ data.pk }}">{{data.city_name}}</option>
+{% endfor %}

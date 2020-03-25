@@ -1,0 +1,15 @@
+{% extends 'dashboard-base.html' %}
+ 
+ {% block dashboard %}
+    <div class="message_afrea" style="padding-left:15px;margin-bottom:10px;">
+        {% if messages %} 
+            {% for message in messages %} 
+                <p style="color:red">{{message}}</p>
+            {% endfor %} 
+        {% endif %}
+    </div>
+     <div class="dashboard_area">
+         
+     </div>
+ {% endblock dashboard %}
+     

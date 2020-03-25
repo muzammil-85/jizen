@@ -1,0 +1,44 @@
+{% extends 'commonapp/website_base.html' %}
+
+{% block title %}
+    Admin Login Page
+{% endblock title %}
+
+{% block body %}
+    
+<section class="user_login_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 login_forms">
+                <h2 class="text-center card-title">Admin Login Area</h2>
+                <br>
+                
+                {% if messages %}
+                    
+                    {% for message in messages %}
+                        <p style="color: red;">{{message}}</p>
+                    {% endfor %}
+                        
+                {% endif %}
+                    
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Admin Email</label>
+                        <input type="text" name='username' id="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin_password">Admin Password</label>
+                        <input type="password" name='admin_password' id="admin_password" class="form-control" required>
+                    </div>
+                    <div class="submit_button form-group"> 
+                        <input type="submit" value="Admin Login" class="btn btn-lg btn-success">  
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+    
+{% endblock body %}

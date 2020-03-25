@@ -1,0 +1,64 @@
+{% extends 'dashboard-base.html' %}  
+{% load data_load %}
+{% block dashboard %}  
+    <div class="poor_people_area">
+        <div class="row"> 
+            <div class="make_payment col-sm-10">
+                <form action="" method="POST">{% csrf_token %}
+                    <table class="table">
+                        <tr>
+                            <td class="width-20"><label for="payment_type">Payment Type</label></td>
+                            <td>
+                                <select name="payment_type" class="form-control" id="payment_type"> 
+                                    {% for item in payment_type %}
+                                        <option value="{{item.id}}">{{item}}</option>
+                                    {% endfor %}  
+                                </select>
+                            </td>
+                        </tr>
+                            
+                        <tr>
+                            <td><label for="payment_amount">Payment Amount</label></td>
+                            <td><input type="text" class="form-control" name="payment_amount" id="payment_amount"></td>
+                        </tr>
+                        <tr id="bank">
+                            
+                        </tr> 
+                            <tr>
+                                
+                            </tr> 
+                        <tr>
+                            <td></td>
+                            <td><input type="submit" class="btn btn-success" value="Make Payment"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock dashboard %}
+
+{% block script %}
+<script>
+        $(document).ready(function(){ 
+            $("#payment_type").change(function(){  
+                var type = $(this).val();
+                if(type == 1){
+                    $("#bank").html('<td><label for="bank_account">Bank Account</label></td><td><input type="number" class="form-control" name="bank_account" id="bank_account"></td>');
+                }
+                else if(type == 2){
+                    $("#bank").html('<td><label for="bkash_account">Bkash Account</label></td><td><input type="number" class="form-control" name="bkash_account" id="bkash_account"></td>');
+                }
+                else{
+                    $('#bank').html('')
+                }
+                 
+            });
+        });
+    </script>
+    
+{% endblock script %}
+    
+    

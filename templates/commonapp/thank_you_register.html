@@ -1,0 +1,20 @@
+{% extends 'commonapp/website_base.html' %}  
+{% block body %}
+    <section class="home_page_area">
+        <div class="container">
+            <div class="row">
+                <div class="col thanks_content"> 
+                    {% if messages %} 
+                        {% for item in messages %}
+                            <h2>{{item}}</h2>
+                        {% endfor %}
+                            
+                    {% endif %} 
+                    <p>We will contact with you very soon</p>
+                </div> 
+            </div>
+        </div>
+    </section>
+{% endblock body %}
+ 
+    

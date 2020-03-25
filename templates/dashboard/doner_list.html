@@ -1,0 +1,65 @@
+{% extends 'dashboard-base.html' %}
+{% load data_load %}
+{% block title %}
+    Doner List
+{% endblock title %}
+
+{% block dashboard %}  
+    <div class="add_poor_area">
+        <h2 class="fweight-600 fsize-30 pbottom-30 align-center">
+            Doner Lists
+        </h2>
+        
+        {% if messages %}
+            
+            {% for message in messages %}
+                <p style="color:red">{{message}}</p>
+            {% endfor %}
+                
+        {% endif %}
+            
+
+             <table class="table table-bordered table-dark table-hover table-striped">
+                 <thead>
+                     <tr>
+                         <th>SL</th>
+                         <th>Name</th>
+                         <th>Poor People</th>
+                         <th>Date</th>
+                         <th>Amount</th>
+                         <th>Total</th> 
+                     </tr>
+                 </thead>
+                 <tbody>
+                     
+                     
+                     {% if doner %} 
+                         {% for item in doner %}
+                            <tr>
+                                <td scope="row">{{forloop.counter}}</td>
+                                <td>{{item.doner_name}}</td> 
+                                <td> 
+                                        
+                                {% for data in item|doner_transaction:item.id %}
+                                   {{data.payment_to.name}} <br>
+                                {% endfor %}
+                            </td>  
+                                <td>{{item.doner_phone}}</td> 
+                                <td>{{item.doner_name}}</td> 
+                                <td>{{item.doner_name}}</td> 
+                            </tr>
+                         {% endfor %} 
+                    {% else %}
+                        <h2>There is no Active Doner</h2>
+                     {% endif %}
+                         
+                    
+                </tbody>
+             </table> 
+    </div>
+    <script>
+        function sure_delete(){
+            alert("Do you want to delte");
+        }
+    </script>
+{% endblock dashboard %}

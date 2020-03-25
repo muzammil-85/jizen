@@ -1,0 +1,49 @@
+{% extends 'dashboard-base.html' %}  
+
+{% block title %}
+    Doner Login History
+{% endblock title %} 
+{% load data_load %}
+{% block dashboard %}  
+<div class="dashboard_topbar">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dashboar_top_title">
+                <a class="link fsize-20 fweight-600" href="{% url 'poorapp:doner_dashboard' %}"><i class="fa fa-hand-o-right"></i>Back to Dashboard</a>
+            </div>
+            
+        </div>  
+        <div class="col-sm-6">
+            <div class="dashboar_top_title">
+                <h2 class="fweight-600 fsize-24 pbottom-30 align-center">
+                    Login History
+                </h2>
+            </div>
+            
+        </div>  
+    </div>
+</div>  
+<hr>
+<div class="add_poor_area login_history">
+    <table class="table table-bordered table-hover align-center">
+        <thead class="table-dark">
+            <td>Sl</td>
+            <td>Name</td>
+            <td>Ip Address</td>
+            <td>Login Date</td> 
+        </thead>
+        <tbody class=""> 
+            {% for item in login_history %} 
+            <tr>
+                <td>{{foorloop.counter}}</td>
+                <td>{{item.doner_name}}</td>
+                <td>{{item.doner_ip}}</td>
+                <td>{{item.login_date}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock dashboard %}

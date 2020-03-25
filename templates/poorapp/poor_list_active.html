@@ -1,0 +1,94 @@
+{% extends 'dashboard-base.html' %}
+{% load data_load %}
+
+{% block title %}
+    Add New Poor Item
+{% endblock title %}
+
+{% block dashboard %} 
+    <div class="dashboard_topbar">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="dashboar_top_title">
+                    <a class="link fsize-20 fweight-600" href="{% url 'poorapp:father_prof' %}"><i class="fa fa-hand-o-right"></i> Add New Poor People</a>
+                </div>
+                
+            </div> 
+            <div class="col-sm-4">
+                <h2 class="fweight-600 fsize-24 align-center">
+                    All Active People
+                </h2>
+            </div>
+            <div class="col-sm-4">
+                <div class="dashboar_top_title align-right">
+                    <a class="link fsize-20 fweight-600" href=""><i class="fa fa-hand-o-right"></i> Search Poor Plople</a>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <hr>
+    <div class="add_poor_area"> 
+        <div class="search_option">
+            <div class="row">
+                <div class="col-sm-7"> 
+                    <div class="button_search_option">
+                        <ul>  
+                            <li><a href="{% url 'poorapp:poor_list_all' %}">All - <span>{{all_poor_list}}</span></a></li>
+                            <li><a class="active" href="{% url 'poorapp:poor_list' %}">Active - <span>{{total}}</span></a></li>
+                            <li><a href="{% url 'poorapp:poor_list_inactive' %}">Inactive - <span>{{poor_list_inactive}}</span></a></li> 
+                            <li><a href="{% url 'poorapp:poor_list_pending' %}">Pending - <span>{{poor_list_pending}}</span></a></li>
+                            <li><a href="{% url 'poorapp:poor_list_complete' %}">Complete - <span>{{poor_list_complete}}</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="custom_search">
+                        <form action="">
+                            <input type="text" name="s" placeholder="Search By Name" class="form-control">
+                            <input type="submit" class="btn btn-success" value="Search">
+                        </form>
+                    </div> 
+                </div>
+            </div>
+        </div>  
+        
+        <table class="table table-bordered table-dark table-hover table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>SL</th>
+                    <th>Name</td>
+                    <th>Proffession</td>
+                    <th>Help Type</td>
+                    <th>Amount</td>
+                    <th>Collection Date</td>  
+                    <th class="align-center">Action</td>
+                </tr>
+            </thead>
+            <tbody>  
+                {% if poor_list %} 
+                    {% for poor in poor_list %}
+                    <tr>
+                        <td scope="row">{{forloop.counter}}</td>
+                        <td>{{poor.name}}</td>
+                        <td>{{poor.aplicant_proffessions}}</td>
+                        <td>{{poor.help_type}}</td>
+                        <td>{{poor.amount}}</td>
+                        <td>{{poor.require_date}}</td> 
+                        <td class="action light width-20 align-center">
+                            <a href=""><i class="fa fa-eye"></i></a> 
+                            <a href=""><i class="fa fa-edit"></i></a> 
+                            <a onclick="sure_delete()" href=""><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}  
+                {% endif %} 
+            
+        </tbody>
+        </table> 
+    </div>
+    <script>
+        function sure_delete(){
+            alert("Do you want to delte");
+        }
+    </script>
+{% endblock dashboard %}

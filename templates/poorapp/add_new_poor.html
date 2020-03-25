@@ -1,0 +1,137 @@
+{% extends 'dashboard-base.html' %}
+
+{% block title %}
+    Add New Poor Item
+{% endblock title %}
+
+{% block dashboard %} 
+    <div class="dashboard_topbar">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="dashboar_top_title">
+                    <a class="link fsize-20 fweight-600" href=""><i class="fa fa-hand-o-right"></i> View Poor Lits</a>
+                </div>
+                
+            </div> 
+            <div class="col-sm-6">
+                <div class="dashboar_top_title align-right">
+                    <a class="link fsize-20 fweight-600" href=""><i class="fa fa-hand-o-right"></i> You are adding New Poor Item</a>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <hr>
+    <div class="add_poor_area">
+        <h2 class="fweight-600 fsize-30 pbottom-30 align-center">
+            Add new Poor People
+        </h2>
+        <form action="" method="POST">
+            <table class="table table-bordered"> 
+                <tbody>
+                    <tr>
+                        <td>Applicant Name *</td>
+                        <td><input type="text" name="name" class="form-control" id="name"></td>
+                        <td>Applicant Email</td>
+                        <td><input type="email" name="email" class="form-control" id="email"></td>
+                    </tr>
+                    <tr> 
+                        <td>Mobile Number</td>
+                        <td><input type="tel" name="phone" id="ap_mobile" class="form-control"></td>
+                        <td>Your Proffession</td>
+                        <td>
+                            <select name="aplicant_proffession" class="form-control" id="ap_proffession">
+                                <option value="one">Gob job holder</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Applicant's Image</td>
+                        <td><input class="form-" type="file" name="applicant_image" id="ap_image"></td>
+                        <td>Father's Name</td>
+                        <td><input type="text" name="father_name" id="father_name" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>Father Pfoffession</td>
+                        <td>
+                            <select name="father_proffession" class="form-control" id="father_proffession">
+                                <option value="one">Farmar</option>
+                            </select>
+                        </td>
+                        <td>Father Contact Number</td>
+                        <td><input type="tel" name="father_mobile" class="form-control" id="father_mobile"></td>
+                    </tr>
+                    <tr>
+                        <td>Mother's Name</td>
+                        <td><input type="text" id="mother_name" name="mother_name" class="form-control"></td>
+                        <td>Type Of Help</td>
+                        <td>
+                            <select name="help_type" id="help_type" class="form-control">
+                                <option value="">Cash</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td><input type="number" name="amount" class="form-control" id="amount"></td>
+                        <td>When you need the Mony</td>
+                        <td><input type="date" name="require_date" class="form-control" id="require_date"></td>
+                    </tr>
+                    <tr> 
+                        <td class="ptop-10" rowspan="2">Address</td>
+                        <td rowspan="2"><textarea name="address" class="form-control"  id="address" cols="" rows="3"></textarea></td>
+                        <td>Payment Type</td>
+                        <td>
+                            <select name="payment_type" fsize-18 id="payment_type" class="form-control">
+                                <option class="form-control" value="">One</option>
+                                <option class="form-control" value="">two</option>
+                                <option class="form-control" value="">Three</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td>Bank Account</td>
+                        <td><input type="number" id="bank_account" name="bank_account" class="form-control"></td>
+                    </tr>
+                    <tr>  
+                        <td>Identity File Type</td>
+                        <td>
+                            <select name="itendity_type" class="form-control" id="itendity_type">
+                                <option value="">NID</option>
+                                <option value="">Passport</option>
+                            </select>
+                        </td> 
+                        <td>Upload Identity File</td>
+                        <td><input type="file" name="identity_file" id="identity_file"></td>
+                    </tr>
+                    <tr>
+                        <td>NID Number</td>
+                        <td><input type="number" name="nid_number" class="form-control" id="nid_number"></td>
+                        <td>Document File One</td>
+                        <td><input type="file" name="doc_file_one" id="doc_file_one"></td>
+                    </tr>
+                    <tr>
+                        <td>Document File Two</td>
+                        <td><input type="file" name="doc_file_two" id="doc_file_two"></td> 
+                        <td>Document File Three</td>
+                        <td><input type="file" name="doc_file_three" id="doc_file_three"></td>
+                    </tr>
+                    <tr>
+                        <td>Problem Description</td>
+                        <td colspan="3">
+                            <textarea name="problem_description" class="form-control" id="problem_description" cols="30" rows="5"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align-center" colspan="4">
+                            <input type="submit" id="submit_btn" class="btn btn-success align-center" value="Submit Application">
+                        </td>
+                    </tr>
+
+
+
+                </tbody>
+            </table>
+        </form>
+    </div>
+{% endblock dashboard %}
+    

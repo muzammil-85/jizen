@@ -1,0 +1,55 @@
+{% extends 'dashboard-base.html' %}  
+{% load data_load %}
+{% block dashboard %}  
+    <div class="transaction_title pbottom-30 ptop-10"> 
+         <h2 class="width-40 float-left">All transactions</h2> 
+         <ul>
+             <li><a href="">Download PDF</a></li>
+             <li><a href="{% url 'poorapp:csv_doner_transaction_import' request.session.userid %}">Export CSV</a></li>
+         </ul>
+    </div>  
+
+    <div class="poor_people_area">
+        <div class="row">
+            <div class="col">
+                <div class="transaction_table">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead class="table-dark">
+                            <th>SL</th>
+                            <th>Payment Type</th>
+                            <th>Transaction Date</th>
+                            <th>Paid to</th>
+                            <th>TC Numbner</th>
+                            <th>Amount Paid</th>
+                            <th>Amount Need</th>
+                            <th>Amount Received</th>
+                            <th>Amount Due</th> 
+                        </thead>
+                        <tbody>
+                            
+                            {% for transaction in transaction_list %}
+                            <tr>
+                                    
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{transaction.payment_type}}</td>
+                                    <td>{{transaction.payment_date}}</td>
+                                    <td>{{transaction.payment_to}}</td>
+                                    <td>{{transaction.transaction_num}}</td>
+                                    <td>{{transaction.payment_amount}}</td>
+                                    <td>{{transaction.payment_to.amount}}</td>
+                                    <td>{{transaction.payment_to.amount_received}}</td>
+                                    <td>{{require|amount_require:transaction}}</td>  
+                                </tr>
+                            {% endfor %}
+                                
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock dashboard %}
+    

@@ -1,0 +1,111 @@
+{% extends 'commonapp/website_base.html' %}
+
+{% block title %}
+    User Login Page
+{% endblock title %}
+
+{% block body %}
+    
+<section class="user_login_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 login_forms">
+                <h2 class="text-center card-title">Register As Doner</h2>
+                <br>
+                
+                {% if messages %}
+                    
+                    {% for message in messages %}
+                        <p style="color: red;">{{message}}</p>
+                    {% endfor %}
+                        
+                {% endif %}
+                    
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="doner_name">Name *</label>
+                        <input type="text" name='doner_name' id="doner_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="doner_email">Email Address *</label>
+                        <input type="email" name='doner_email' id="doner_email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="doner_phone">Phone Number</label>
+                        <input type="tel" name='doner_phone' id="doner_phone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="doner_pass">Password *</label>
+                        <input type="password" name='doner_pass' id="doner_pass" class="form-control" required>
+                    </div>
+                    <div class="form-group"> 
+                        <label for="district">District</label> 
+                        <select name="district" class=form-control id="district">  
+                            {% for item in doner_district %}
+                                <option value="{{item.id}}">{{item}}</option>
+                            {% endfor %}  
+                        </select>  
+                    </div>
+                    <div class="form-group"> 
+                        <label for="city_list">District</label> 
+                        <select name="city_list" class=form-control id="city_list">  
+                            {% for item in city_list %}
+                                <option value="{{item.id}}">{{item.city_name}}</option>
+                            {% endfor %}  
+                        </select>  
+                    </div>
+                    <div class="submit_button form-group">  
+                        <input type="submit" value="Register As Doner" class="btn btn-lg btn-success">  
+                    </div>
+
+                    <p>Already have Doner account ? <a href="">Login</a> to Donate</p>
+                    <div id="data">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>  
+
+
+{% endblock body %}
+{% block scripts %}
+    
+<script>
+
+        $('#district').change(function(){
+            var url = '/dashboard/get-city/';
+            $.ajax({
+                url: url,
+                data: {
+                    'district': $('#district :selected').val(), 
+                },
+                success: function (data) {
+                   $("#city_list").html(data); 
+                }
+            });
+        });
+
+/*
+
+    $(document).ready(function(){ 
+        $("#district").change(function(){  
+            $.ajax({
+                type:'POST',
+                url:'/get-city/',
+                data:{
+                    'district':$("#district").val();
+                    'csrfmiddlewaretoken':$("input[name=csrfmiddlewaretoken]").val()
+                },
+                success:function({
+
+                })
+            });
+             
+        });
+    });
+    */
+</script>
+{% endblock scripts %}

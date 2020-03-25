@@ -1,0 +1,49 @@
+{% extends 'dashboard-base.html' %}
+
+{% block title %}
+    Add New Poor Item
+{% endblock title %}
+
+{% block dashboard %} 
+    <div class="dashboard_topbar">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="dashboar_top_title">
+                    <a class="link fsize-20 fweight-600" href="{% url 'poorapp:father_prof_list' %}"><i class="fa fa-hand-o-right"></i> View Father Proffession Lits</a>
+                </div>
+                
+            </div> 
+            <div class="col-sm-6">
+                <div class="dashboar_top_title align-right">
+                    <a class="link fsize-20 fweight-600" href=""><i class="fa fa-hand-o-right"></i> Search Father Proffession</a>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <hr>
+    <div class="add_poor_area">
+        <h2 class="fweight-600 fsize-30 pbottom-30 align-center">
+            Add new Father Proffession
+        </h2>
+        
+        {% if messages %}
+            
+            {% for message in messages %}
+                <p style="color:red">{{message}}</p>
+            {% endfor %}
+                
+        {% endif %}
+            
+        <form action="" method="POST">
+            {% csrf_token %}
+             <table class="table table-bordered">
+                 <tr>
+                     <td>Proffession Name: </td>
+                     <td><input type="text" name="father_prof" class="form-control" required></td>
+                     <td><input type="submit" value="Add Proffession" class="btn btn-success"></td>
+                 </tr>
+             </table>
+        </form>
+    </div>
+{% endblock dashboard %}
+    

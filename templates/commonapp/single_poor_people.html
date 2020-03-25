@@ -1,0 +1,79 @@
+{% extends 'commonapp/website_base.html' %} 
+{% load data_load %}
+{% block body %}
+    <section class="home_page_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="applicant_content_area">
+                        <div class="single_info_area">
+                            <h2>Personal Information</h2>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 applicant_content">
+                                    <p><strong>Name </strong>{{poor.name}}</p>
+                                    <p><strong>Mobile Number  </strong>{{poor.mobile_number}}</p>
+                                    <p><strong>Email  </strong>{{poor.email}}</p>
+                                    <p><strong>Age :</strong>{{poor.aplicant_age}} years</p>
+                                    <p><strong>Proffession  </strong>{{poor.aplicant_proffessions.proffession_type}}</p>
+                                    <p><strong>Gender  </strong>{{poor.get_aplicant_gender_display}}</p>
+                                    <p><strong>Blood Group  </strong>{{poor.get_blood_group_display}}</p>
+                                    <p><strong>Total Amount Needed  </strong>{{poor.amount}}</p>
+                                    <p><strong>Amount Received  </strong>{{poor.amount_received}}</p>
+                                    <p><strong>Help Needed for  </strong>{{poor.help_type.category_name}}</p>
+                                    <p><strong>Help Needed Date  </strong>{{poor.require_date}}</p>
+                                </div>
+                                <div class="col-6 applicant_pic">
+                                    <img src="{{poor.image.url}}" alt="">
+                                </div>
+                            </div>
+                            <hr>
+                            <p><strong>Father Name  </strong>{{poor.father_name}}</p>
+                            <p><strong>Father Proffession  </strong>{{poor.father_proffession.proffession_type}}</p>
+                            <p><strong>Father Mobile Number  </strong>{{poor.father_contact_number}}</p>
+                            <p><strong>Mother Name  </strong>{{poor.mother_name}}</p>
+                            <p><strong>District  </strong>{{poor.district_name}}</p>
+                            <p><strong>City  </strong>{{poor.city_name}}</p>
+                            <p><strong>Post Code  </strong>{{poor.post_code}}</p>
+                            <p><strong>Address  </strong>{{poor.address}}</p>
+                            <p><strong>Payment Method  </strong>{{poor.payment_type.payment_type}}</p> 
+                            <p><strong>{{poor.payment_type.payment_type}} Number  </strong>{{poor.payment_type_account}}</p>
+                            <p><strong>Identity Type   </strong>{{poor.get_identity_doc_type_display}}</p>
+                            <p><strong>{{poor.get_identity_doc_type_display}} Number  </strong>{{poor.identity_doc_number}}</p>
+                            <h3>Image of {{poor.get_identity_doc_type_display}} </h3>
+                            <hr>
+                            <img src="{{poor.identity_doc.url}}" alt="">
+                            <p><strong></strong>{{poor.problem_description|safe}}</p>
+                                <h3>Image of Documents:</h3>
+                            <hr>
+                            <img src="{{poor.document_file_one.url}}" alt="">
+                            <img src="{{poor.document_file_two.url}}" alt="">
+                            <img src="{{poor.document_file_three.url}}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 home_sidebar">
+                    <div class="sidebar_homepage">
+                        <div class="single_sidebar_home">
+                            <h2>Top Donner</h2>
+                            <ul>
+                                {% for item in help_category %}
+                                    <li><a href="">{{item}}</a></li>
+                                {% endfor %} 
+                            </ul>
+                        </div>
+                        <div class="single_sidebar_home">
+                            <h2>Help Category</h2>
+                            <ul>
+                                {% for item in help_category %}
+                                    <li><a href="">{{item}}</a></li>
+                                {% endfor %} 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body %} 
+    

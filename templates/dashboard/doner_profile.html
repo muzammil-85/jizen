@@ -1,0 +1,52 @@
+{% extends 'dashboard-base.html' %}
+
+{% block dashboard %}
+    <div class="doner_prifile">
+        <div class="top_section">
+            <div class="donner_image">
+                <img src="{{doner.doner_image.url}}" alt="">
+            </div>
+            <div class="doner_name">
+                <h2><strong>Name</strong>:  {{doner.doner_name}}</h2>
+                <h2><strong>Email Address</strong>:  {{doner.doner_email}}</h2>
+                <h2><strong>Phone Number</strong>:  {{doner.doner_phone}}</h2>
+                <h2><strong>Joining Date</strong>:  {{doner.joining_date}}</h2>
+                <h2><strong>District</strong>:  {{doner.city_name.district}}</h2>
+                <h2><strong>City</strong>:  {{doner.city_name}}</h2>
+                <h2><strong>Blood Group</strong>:  {{doner.blood_groups}}</h2>
+                <h2><strong>Profile Status</strong>:  {% if doner.status %} Active{% else %} Inactive{% endif %} </h2>
+                <h2><strong>Connected People</strong>:  {{people}}</h2>
+                <h2><strong>Total Amount</strong>:  {{total}}</h2>
+            </div>
+        </div> 
+        <div class="all_transactions">
+            <h2>All Transactions</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <th>SL</th>
+                    <th>Transaction Date</th>
+                    <th>Poorpeople</th>
+                    <th>Transaction Numbner</th>
+                    <th>Amount</th>
+                </thead>
+                <tbody>
+                    
+                    {% for item in payment %}
+                        <tr>
+                            <td>{{forloop.counter}}</td> 
+                            <td>{{item.payment_date}}</td> 
+                            <td>{{item.payment_to}}</td> 
+                            <td>{{item.transaction_num}}</td> 
+                            <td>{{item.payment_amount}}</td> 
+                        </tr>
+                    {% endfor %}
+                        
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+
+{% endblock dashboard %}
+    

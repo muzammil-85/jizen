@@ -1,0 +1,248 @@
+{% extends 'commonapp/website_base.html' %} 
+{% block body %}
+{% load static %}
+    <section class="application_form_area">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="add_poor_area bg-eee ptop-40 bradious-10">
+                        <h2 class="fweight-600 fsize-30 pbottom-30 align-center">
+                            Application Form
+                        </h2>
+                        <a href="{% static 'img/application-form.pdf' %}" class="btn btn-success">Download as PDF</a>
+                        <form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                            <div class=" table_radious"></div>
+                            <table class="table table-bordered"> 
+                                <tbody>
+                                    <tr>
+                                        <td>Applicant Name *</td>
+                                        <td><input type="text" name="name" class="form-control" id="name" required></td>
+                                        <td>Applicant Email</td>
+                                        <td><input type="email" name="email" class="form-control" id="email" required></td>
+                                    </tr>
+                                    <tr> 
+                                        <td>Mobile Number *</td>
+                                        <td><input type="tel" name="phone" id="ap_mobile" class="form-control" required></td>
+                                        <td>Your Proffession *</td>
+                                        <td>
+                                            <select name="aplicant_proffession" class="form-control" id="applicant_proffession" required>
+
+                                                <option value="" selected>---Select---</option>
+                                                {% for item in my_proffession %}
+                                                    <option value="{{item.id}}">{{item.proffession_type}}</option> 
+                                                {% endfor %} 
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gender</td>
+                                        <td>
+                                            <select name="gender" class="form-control" id="" required>
+                                                <option value="" selected>---Select---</option>
+                                                <option value="F">Female</option>
+                                                <option value="M">Male</option>
+                                                <option value="O">Other</option>
+                                            </select>
+                                        </td>
+                                        <td>Age</td>
+                                        <td><input type="number" class="form-control" name="age" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Applicant's Bllod Group *</td>
+                                        <td>
+                                            <select name="blood_group" id="" class="form-control" required> 
+                                                <option value="" selected>---Select---</option>
+                                                {% for item in blood_group %}
+                                                    <option value="{{item.id}}">{{item.group_name}}</option> 
+                                                {% endfor %} 
+                                                
+                                            </select>
+                                        </td>
+                                        <td>Applicant's Image  *</td>
+                                        <td><input class="form-" type="file" name="applicant_image" id="ap_image" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Father's Name *</td>
+                                        <td><input type="text" name="father_name" id="father_name" class="form-control" required></td>
+                                        <td>Father Pfoffession *</td>
+                                        <td>
+                                            <select name="father_proffession" class="form-control" id="father_proffession " required>
+                                                <option value="" selected>---Select---</option>
+                                                {% for item in father_proffession %}
+                                                    <option value="{{item.id}}">{{item.proffession_type}}</option> 
+                                                {% endfor %} 
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Father Contact Number *</td>
+                                        <td><input type="tel" name="father_mobile" class="form-control" id="father_mobile" required></td>
+                                        <td>Mother's Name</td>
+                                        <td><input type="text" id="mother_name" name="mother_name" class="form-control" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Type Of Help *</td>
+                                        <td>
+                                            <select name="help_type" id="help_type" class="form-control" required>
+                                                <option value="" selected>---Select---</option>
+                                                {% for item in help_type %}
+                                                    <option value="{{item.id}}">{{item.category_name}}</option> 
+                                                {% endfor %} 
+                                            </select>
+                                        </td>
+                                        <td>Amount *</td>
+                                        <td><input type="number" name="amount" class="form-control" id="amount" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td>When you need the Mony *</td>
+                                        <td><input type="date" name="require_date" class="form-control" id="require_date" required></td>
+                                        <td>District *</td>
+                                        <td>
+                                            <select name="district_list" id="district_list" class="form-control" required>
+                                                <option value="" selected>---Select---</option>
+                                                {% for item in district_list %}
+                                                    <option value="{{item.id}}">{{item.district_name}}</option> 
+                                                {% endfor %} 
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr> 
+                                        <td>City *</td>
+                                        <td>
+                                            <select name="city_list" id="city_list" class="form-control" required>
+                                                <option value="" selected>-----select-----</option>
+                                            </select>
+                                        </td>
+                                        <td>Post Code *</td>
+                                        <td><input type="text" name="post_code" class="form-control"></td>
+                                    </tr>
+                                    <tr> 
+                                        <td class="ptop-10" rowspan="2">Address *</td>
+                                        <td rowspan="2"><textarea name="address" class="form-control"  id="address" cols="" rows="3" required></textarea></td>
+                                        <td>Payment Type *</td>
+                                        <td>
+                                            <select name="payment_type" fsize-18 id="payment_type" class="form-control" required>
+                                                    <option value="">--Select--</option> 
+                                                    {% for item in payment_type %}
+                                                        <option value="{{item.pk}}">{{item}}</option>
+                                                    {% endfor %}
+                                                        
+                                                      
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr> 
+                                        <td id="mypayment">Select Payment type</td>
+                                        <td><input type="number" id="account_number" name="account_number" class="form-control" required></td>
+                                    </tr>
+                                    <tr>  
+                                        <td>Identity File Type *</td>
+                                        <td>
+                                            <select name="itendity_type" class="form-control" id="itendity_type" required>
+                                                <option value="" selected>---Select---</option>
+                                                <option class="form-control" value="NC">NID Card</option>
+                                                <option class="form-control" value="DL">Driving License</option>
+                                                <option class="form-control" value="PP">Passport</option>
+                                                <option class="form-control" value="BC">Birth Certificate</option> 
+                                            </select>
+                                        </td> 
+                                        <td>Upload Identity File *</td>
+                                        <td><input type="file" name="identity_file" id="identity_file" required></td>
+                                    </tr>
+                                    <tr>  
+                                        <td id="doc_type">Select Identity type First</td> 
+                                        <td><input type="number" name="identity_number" class="form-control" id="nid_number" required></td>
+                                        <td>Document File One</td>
+                                        <td><input type="file" name="doc_file_one" id="doc_file_one" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Document File Two</td>
+                                        <td><input type="file" name="doc_file_two" id="doc_file_two"></td> 
+                                        <td>Document File Three</td>
+                                        <td><input type="file" name="doc_file_three" id="doc_file_three"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Problem Description  *</td>
+                                        <td colspan="3">
+                                            <textarea name="problem_description" class="form-control" id="problem_description" cols="30" rows="5" required></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="align-center" colspan="4">
+                                            <input type="submit" id="submit_btn" class="btn btn-success align-center" value="Submit Application">
+                                        </td>
+                                    </tr>  
+                                </tbody>  
+                            </table>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="my"></div>
+{% endblock body %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+    $("#payment_type").change(function(){
+        var ptype = $("#payment_type").val();
+        if(ptype == 1){
+            $("#mypayment").html("Bank Account");
+            $("#account_number").prop('disabled', false);
+        }
+        else if(ptype == 2){
+            $("#mypayment").html("Bkash Account");
+            $("#account_number").prop('disabled', false);
+        }
+        else if(ptype == 3){
+            $("#mypayment").html("Not Required"); 
+            $("#account_number").prop('disabled', true);
+        }
+        else{
+            $("#mypayment").html("Select Payment type"); 
+        }
+    });  
+        $("#itendity_type").change(function(){
+            value = $("#itendity_type").val();
+            
+            if(value == ""){
+                $("#doc_type").html("Select Identity type First");
+            }
+            if(value == "NC"){
+                $("#doc_type").html("NID Number");
+            }
+            if(value == "DL"){
+                $("#doc_type").html("Driving License Number");
+            }
+            if(value == "PP"){
+                $("#doc_type").html("Passport Number");
+            } 
+            if(value == "BC"){
+                $("#doc_type").html("Birth Certificate Number");
+            }
+            
+            
+        }); 
+    
+        $('#district_list').change(function() {
+            var url = "{% url 'commonapp:bind_districtwise_city' %}";
+            $.ajax({
+                url: url,
+                data: {
+                    'district_list': $("#district_list :selected").val(),
+                },
+                success: function(data) {
+                    $("#city_list").html(data);
+                }
+            });
+        });
+    </script>
+
+
+{% endblock scripts %}
+    
+    
