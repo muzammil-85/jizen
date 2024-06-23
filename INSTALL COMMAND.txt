@@ -1,0 +1,14 @@
+commands:
+
+  virtualenv venv
+	
+  venv\Scripts\activate
+
+  pip install -r requirements.txt
+
+  python manage.py runserver
+
+
+To create new admin
+
+	python manage.py createsuperuser

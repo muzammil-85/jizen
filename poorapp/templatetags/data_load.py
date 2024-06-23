@@ -1,6 +1,6 @@
 from django import template 
 register = template.Library()
-from ..models import PoorPeople,Doner,PaymentProcess,CityList
+from ..models import Receivers,Doner,PaymentProcess,CityList
 
 @register.filter(name='doner_info')
 def intactive_counts(request,id):
@@ -39,6 +39,6 @@ def transaction(request,transaction):
  
 @register.filter(name='doner_transaction')
 def doner_transactions(request,doner_id):
-    transaction = PaymentProcess.objects.filter(payment_by_id=doner_id).distinct() 
+    transaction = PaymentProcess.objects.filter(payment_by_id=doner_id).distinct()
     return transaction
 

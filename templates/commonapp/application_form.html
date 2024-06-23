@@ -22,7 +22,7 @@
                                     </tr>
                                     <tr> 
                                         <td>Mobile Number *</td>
-                                        <td><input type="tel" name="phone" id="ap_mobile" class="form-control" required></td>
+                                        <td><input type="tel" name="phone" required pattern="\d{10}" id="ap_mobile" class="form-control" required title="Please enter a 10-digit phone number"></td>
                                         <td>Your Proffession *</td>
                                         <td>
                                             <select name="aplicant_proffession" class="form-control" id="applicant_proffession" required>
@@ -45,26 +45,17 @@
                                             </select>
                                         </td>
                                         <td>Age</td>
-                                        <td><input type="number" class="form-control" name="age" required></td>
+                                        <td><input type="number" class="form-control" pattern="\d{,2}" name="age" required></td>
                                     </tr>
                                     <tr>
-                                        <td>Applicant's Bllod Group *</td>
-                                        <td>
-                                            <select name="blood_group" id="" class="form-control" required> 
-                                                <option value="" selected>---Select---</option>
-                                                {% for item in blood_group %}
-                                                    <option value="{{item.id}}">{{item.group_name}}</option> 
-                                                {% endfor %} 
-                                                
-                                            </select>
-                                        </td>
+                                        
                                         <td>Applicant's Image  *</td>
                                         <td><input class="form-" type="file" name="applicant_image" id="ap_image" required></td>
                                     </tr>
                                     <tr>
                                         <td>Father's Name *</td>
                                         <td><input type="text" name="father_name" id="father_name" class="form-control" required></td>
-                                        <td>Father Pfoffession *</td>
+                                        <td>Father Proffession *</td>
                                         <td>
                                             <select name="father_proffession" class="form-control" id="father_proffession " required>
                                                 <option value="" selected>---Select---</option>
@@ -76,7 +67,7 @@
                                     </tr>
                                     <tr>
                                         <td>Father Contact Number *</td>
-                                        <td><input type="tel" name="father_mobile" class="form-control" id="father_mobile" required></td>
+                                        <td><input type="tel" name="father_mobile" required pattern="\d{10}" title="Please enter a 10-digit phone number" class="form-control" id="father_mobile" required></td>
                                         <td>Mother's Name</td>
                                         <td><input type="text" id="mother_name" name="mother_name" class="form-control" required></td>
                                     </tr>
@@ -90,11 +81,11 @@
                                                 {% endfor %} 
                                             </select>
                                         </td>
-                                        <td>Amount *</td>
+                                        <td id="help_type_field">Amount *</td>
                                         <td><input type="number" name="amount" class="form-control" id="amount" required></td>
                                     </tr>
                                     <tr>
-                                        <td>When you need the Mony *</td>
+                                        <td>When you need the Help *</td>
                                         <td><input type="date" name="require_date" class="form-control" id="require_date" required></td>
                                         <td>District *</td>
                                         <td>
@@ -111,29 +102,30 @@
                                         <td>
                                             <select name="city_list" id="city_list" class="form-control" required>
                                                 <option value="" selected>-----select-----</option>
+                                                {% for item in city_list %}
+                                                    <option value="{{item.id}}">{{item.city_name}}</option> 
+                                                {% endfor %} 
                                             </select>
                                         </td>
                                         <td>Post Code *</td>
-                                        <td><input type="text" name="post_code" class="form-control"></td>
+                                        <td><input type="text" name="post_code" pattern="\d{3,}" title="Please enter a valid postcode" class="form-control"></td>
                                     </tr>
                                     <tr> 
                                         <td class="ptop-10" rowspan="2">Address *</td>
                                         <td rowspan="2"><textarea name="address" class="form-control"  id="address" cols="" rows="3" required></textarea></td>
-                                        <td>Payment Type *</td>
+                                        <td id="payment_type_field">Payment Type *</td>
                                         <td>
-                                            <select name="payment_type" fsize-18 id="payment_type" class="form-control" required>
+                                            <select name="payment_type" id="payment_type" class="form-control">
                                                     <option value="">--Select--</option> 
                                                     {% for item in payment_type %}
                                                         <option value="{{item.pk}}">{{item}}</option>
                                                     {% endfor %}
-                                                        
-                                                      
                                             </select>
                                         </td>
                                     </tr>
                                     <tr> 
-                                        <td id="mypayment">Select Payment type</td>
-                                        <td><input type="number" id="account_number" name="account_number" class="form-control" required></td>
+                                        <td id="mypayment">Account Number (if bankaccount)</td>
+                                        <td><input type="number" id="account_number" pattern="\d{5,}" name="account_number" class="form-control"></td>
                                     </tr>
                                     <tr>  
                                         <td>Identity File Type *</td>
@@ -155,12 +147,12 @@
                                         <td>Document File One</td>
                                         <td><input type="file" name="doc_file_one" id="doc_file_one" required></td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>Document File Two</td>
                                         <td><input type="file" name="doc_file_two" id="doc_file_two"></td> 
                                         <td>Document File Three</td>
                                         <td><input type="file" name="doc_file_three" id="doc_file_three"></td>
-                                    </tr>
+                                    </tr> -->
                                     <tr>
                                         <td>Problem Description  *</td>
                                         <td colspan="3">
@@ -187,22 +179,90 @@
 {% block scripts %}
 
 <script type="text/javascript">
+    document.getElementById('require_date').min = new Date().toISOString().split('T')[0];
+
+    function validateForm() {
+        var phone = document.getElementById("ap_mobile").value;
+        var father_mobile = document.getElementById("father_mobile").value;
+        var post_code = document.getElementById("post_code").value;
+        
+        var phonePattern = /^\d{10}$/;
+        var postCodePattern = /^\d{3,}$/;
+        
+        if (!phonePattern.test(phone)) {
+            alert("Please enter a valid 10-digit mobile number.");
+            return false;
+        }
+        
+        if (!phonePattern.test(father_mobile)) {
+            alert("Please enter a valid 10-digit father's contact number.");
+            return false;
+        }
+        
+        if (!postCodePattern.test(post_code)) {
+            alert("Please enter a valid post code with at least 3 digits.");
+            return false;
+        }
+
+        var requireDate = document.getElementById("require_date").value;
+        var today = new Date().toISOString().split('T')[0];
+        if (requireDate < today) {
+            alert("The date for when you need help cannot be in the past.");
+            return false;
+        }
+
+        return true;
+    }
+
+    $("#help_type").change(function(){
+        var helpType = $("#help_type").val();
+        if(helpType == "{{ clothes_help_id }}"){
+            $("#help_type_field").html("Count of Clothes Needed *");
+            $("#amount").attr("type", "number");
+            $("#amount").attr("min", "1");
+            $("#payment_type_field").html("Size of Clothes Needed *");
+            $("#payment_type").html('<option value="">--Select--</option><option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option><option value="XL">Extra Large</option>');
+            $("#mypayment").hide();
+            $("#account_number").hide();
+        } else if(helpType == "{{ education_help_id }}"){
+            $("#help_type_field").html("Education Items Needed *");
+            $("#amount").attr("type", "text");
+            $("#payment_type_field").hide();
+            $("#payment_type").hide();
+            $("#mypayment").hide();
+            $("#account_number").hide();
+        } else if(helpType == "{{ food_help_id }}"){
+            $("#help_type_field").html("Quantity of Food per Person Needed *");
+            $("#amount").attr("type", "number");
+            $("#amount").attr("min", "1");
+            $("#payment_type_field").hide();
+            $("#payment_type").hide();
+            $("#mypayment").hide();
+            $("#account_number").hide();
+            // Add time field
+            $('<tr><td>Time Food Needed *</td><td><input type="time" name="food_time" class="form-control" id="food_time" required></td></tr>').insertAfter($(this).closest('tr'));
+        } else {
+            $("#help_type_field").html("Amount *");
+            $("#amount").attr("type", "number");
+            $("#amount").attr("min", "1");
+            $("#payment_type_field").show();
+            $("#payment_type").show();
+            $("#mypayment").show();
+            $("#account_number").show();
+            // Remove time field
+            $("#food_time").closest('tr').remove();
+        }
+    });
 
     $("#payment_type").change(function(){
         var ptype = $("#payment_type").val();
         if(ptype == 1){
             $("#mypayment").html("Bank Account");
             $("#account_number").prop('disabled', false);
-        }
-        else if(ptype == 2){
-            $("#mypayment").html("Bkash Account");
-            $("#account_number").prop('disabled', false);
-        }
-        else if(ptype == 3){
+        } else if(ptype == 3){
             $("#mypayment").html("Not Required"); 
             $("#account_number").prop('disabled', true);
-        }
-        else{
+        } else {
             $("#mypayment").html("Select Payment type"); 
         }
     });  
@@ -244,5 +304,3 @@
 
 
 {% endblock scripts %}
-    
-    

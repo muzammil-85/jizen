@@ -1,19 +1,14 @@
 {% extends 'dashboard-base.html' %}  
 
 {% block title %}
-    Doner Profile Update
+    Donor Profile Update
 {% endblock title %}
     
 {% load data_load %}
 {% block dashboard %}  
 <div class="dashboard_topbar">
     <div class="row">
-        <div class="col-sm-6">
-            <div class="dashboar_top_title">
-                <a class="link fsize-20 fweight-600" href="{% url 'poorapp:doner_dashboard' %}"><i class="fa fa-hand-o-right"></i>Back to Dashboard</a>
-            </div>
-            
-        </div>  
+          
         <div class="col-sm-6">
             <div class="dashboar_top_title">
                 <h2 class="fweight-600 fsize-24 pbottom-30 align-center">
@@ -39,16 +34,7 @@
              <tr>
                  <td>Phone Number</td>
                  <td><input type="tel" value="{{profile.doner_phone}}" name="phone" class="form-control" required></td> 
-                 <td>Blood Group</td>
-                 <td>
-                     <select name="blood" id="blood_group" class="form-control"> 
-                         {% for blood in blood_groups %} 
-                            <option value="{{blood.pk}}"{% if profile.blood_groups_id == blood.pk %} selected {% endif %}>{{blood}}</option>  
-                         {% endfor %}
-                             
-                         
-                     </select>
-                 </td>
+                
              </tr>
              <tr>
                  <td>District</td>

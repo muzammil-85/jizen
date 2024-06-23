@@ -1,13 +1,13 @@
 {% extends 'dashboard-base.html' %}
 {% load data_load %}
 {% block title %}
-    Doner List
+    Donor List
 {% endblock title %}
 
 {% block dashboard %}  
     <div class="add_poor_area">
         <h2 class="fweight-600 fsize-30 pbottom-30 align-center">
-            Doner Lists
+            Donor Lists
         </h2>
         
         {% if messages %}
@@ -24,10 +24,11 @@
                      <tr>
                          <th>SL</th>
                          <th>Name</th>
-                         <th>Poor People</th>
-                         <th>Date</th>
-                         <th>Amount</th>
-                         <th>Total</th> 
+                         <th>Phone</th>
+                         <th>Status</th>
+                         <th>Donation Request</th>
+                         <th>Completed</th>
+                         <th>Action</th> 
                      </tr>
                  </thead>
                  <tbody>
@@ -38,28 +39,29 @@
                             <tr>
                                 <td scope="row">{{forloop.counter}}</td>
                                 <td>{{item.doner_name}}</td> 
-                                <td> 
-                                        
-                                {% for data in item|doner_transaction:item.id %}
-                                   {{data.payment_to.name}} <br>
-                                {% endfor %}
-                            </td>  
+                                
                                 <td>{{item.doner_phone}}</td> 
-                                <td>{{item.doner_name}}</td> 
-                                <td>{{item.doner_name}}</td> 
+                                <td>{{item.status}}</td> 
+                                <td style="color: lime;">{{item.request}}</td> 
+                                <td>{{item.complete}}</td> 
+                                <td class="action light width-25 ">
+                                    
+                                    <a target="_blank" class="m-2" href="{% url 'poorapp:doner_profile' item.id %}"><i class="fa fa-eye"></i></a> 
+                                    {% if item.status == False %}
+                                    <a target="_blank" class="m-2" href="{% url 'poorapp:doner-approved' item.id %}">Approve</a> 
+                                    {% elif item.complete == False %}
+                                    <a target="_blank" class="m-2" href="{% url 'poorapp:doner-completed' item.id %}">Completed</a> 
+                                    {% endif %}
+                                    
+                                </td>
                             </tr>
                          {% endfor %} 
                     {% else %}
-                        <h2>There is no Active Doner</h2>
+                        <h2>There is no Active Donor</h2>
                      {% endif %}
                          
                     
                 </tbody>
              </table> 
     </div>
-    <script>
-        function sure_delete(){
-            alert("Do you want to delte");
-        }
-    </script>
 {% endblock dashboard %}

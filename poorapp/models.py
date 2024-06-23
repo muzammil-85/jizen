@@ -9,12 +9,6 @@ class HelpCategory(models.Model):
     def __str__(self):
         return self.category_name
 
-class BlodGroup(models.Model):
-    group_name      = models.CharField(max_length=30) 
-
-    def __str__(self):
-        return self.group_name
-    
 
 
 class PaymentType(models.Model):
@@ -59,7 +53,7 @@ class CityList(models.Model):
         return self.city_name
     
 
-class PoorPeople(models.Model):  
+class Receivers(models.Model):  
     
     name                    = models.CharField(max_length=150)
     email                   = models.EmailField(max_length=150, blank=True)
@@ -78,17 +72,6 @@ class PoorPeople(models.Model):
     father_proffession      = models.ForeignKey('FatherProffession', on_delete=models.CASCADE)
     father_contact_number   = models.IntegerField()
     mother_name             = models.CharField(max_length=150)
-    blood_list = (
-        ('1','A+'),
-        ('2','A-'),
-        ('3','AB+'),
-        ('4','AB-'),
-        ('5','B+'),
-        ('6','B-'),
-        ('7','O+'),
-        ('8','O-')
-    )
-    blood_group             = models.CharField(max_length=1, default=1, choices=blood_list)
     help_type               = models.ForeignKey('HelpCategory', on_delete=models.CASCADE)
     amount                  = models.IntegerField()
     amount_received         = models.IntegerField(default=0) 
@@ -97,7 +80,7 @@ class PoorPeople(models.Model):
     district_name           = models.ForeignKey(DistrictList, on_delete= models.CASCADE)
     post_code               = models.CharField(max_length=20)
     address                 = models.TextField(max_length=500)
-    payment_type            = models.ForeignKey('PaymentType', on_delete=models.CASCADE)
+    payment_type            = models.ForeignKey('PaymentType', on_delete=models.CASCADE, default=0,null=True)
     payment_type_account    = models.IntegerField(blank=True,null=True) 
     identity_document_lists = (
         ('DL','Driving License'),
@@ -109,20 +92,26 @@ class PoorPeople(models.Model):
     identity_doc            = models.ImageField(upload_to='uploads/')
     identity_doc_number     = models.IntegerField(blank=True)  
     document_file_one       = models.ImageField(upload_to='uploads/', blank=True)
-    document_file_two       = models.ImageField(upload_to='uploads/', blank=True)
-    document_file_three     = models.ImageField(upload_to='uploads/', blank=True)
     problem_description     = RichTextField(blank=True,null=True)
     status                  = models.BooleanField(default=False)
     complete_status         = models.BooleanField(default=False)
     timestamp               = models.DateField(auto_now_add=True, auto_now=False)
     update                  = models.DateField(auto_now=True, auto_now_add=False)
+    # ------------clothing------------
+    cloth_count             = models.IntegerField(default=0);
+    cloth_size              = models.CharField(max_length=200,default='0');
+    # ------------education------------
+    edu_items               = models.CharField(max_length=300,default='');
+    # ---------food-----------
+    food_quantity           = models.IntegerField(default=0);
+    food_time               = models.CharField(max_length=200,null=True, blank=True);
     
 
     def __str__(self):
         return self.name
 
 class PermessionCheck(models.Model):
-    user = models.ForeignKey(PoorPeople, on_delete=models.CASCADE)
+    user = models.ForeignKey(Receivers, on_delete=models.CASCADE)
     view_action = models.BooleanField(default=False)
     delete_action = models.BooleanField(default = False)
     update_action = models.BooleanField(default = False)
@@ -131,13 +120,12 @@ class PermessionCheck(models.Model):
 
 class Doner(models.Model):
     doner_name      = models.CharField(max_length = 120)
-    blood_groups     = models.ForeignKey(BlodGroup, on_delete=models.CASCADE) 
     gender_list = (
         ('F','Female'),
         ('M','Male'),
         ('O','Other')
     )
-    doner_gender   = models.CharField(max_length=1,choices=gender_list, null=True)
+    doner_gender    = models.CharField(max_length=1,choices=gender_list, null=True)
     doner_age       = models.IntegerField(null=True,blank=True)
     doner_phone     = models.CharField(max_length=15)
     doner_email     = models.EmailField(max_length=50,blank=True)
@@ -146,7 +134,11 @@ class Doner(models.Model):
     joining_date    = models.DateField(auto_now=False, auto_now_add=True) 
     district_name   = models.ForeignKey(DistrictList, on_delete= models.CASCADE)
     city_name       = models.ForeignKey(CityList, on_delete= models.CASCADE)
-    status          = models.BooleanField(default=True)
+    status          = models.BooleanField(default=False)
+    complete        = models.BooleanField(default=False)
+    request         = models.BooleanField(default=False)
+    
+    
     
     def __str__(self):
         return self.doner_name
@@ -160,11 +152,10 @@ class DonerLoginHisoty(models.Model):
 
 class PaymentProcess(models.Model):
     payment_type    = models.ForeignKey(PaymentType, on_delete=models.CASCADE) 
-    payment_to      = models.ForeignKey(PoorPeople, on_delete=models.CASCADE)
+    payment_to      = models.ForeignKey(Receivers, on_delete=models.CASCADE)
     payment_by      = models.ForeignKey(Doner, on_delete=models.CASCADE)
     payment_amount  = models.IntegerField()
     bank_account    = models.IntegerField(blank=True, null=True)
-    bkash_account   = models.IntegerField(blank=True,null=True)
     transaction_num = models.CharField(default='1234',max_length=10)
     payment_date    = models.DateField(auto_now_add= True, auto_now=False)
     status          = models.BooleanField(default= False)
@@ -172,25 +163,7 @@ class PaymentProcess(models.Model):
     def __str__(self):
         return "total"
 
-class BloodDoner(models.Model):
-    bdoner_name     = models.CharField(max_length=200)
-    blood_group     = models.ForeignKey(BlodGroup, on_delete=models.CASCADE)
-    last_donate_date = models.DateField()
-    bdoner_phone    = models.CharField(max_length=20)
-    bdoner_pass     = models.CharField(max_length=20)
-    bdoner_district = models.ForeignKey(DistrictList, on_delete=models.CASCADE)
-    bdoner_city     = models.ForeignKey(CityList, on_delete= models.CASCADE)
-    gender_list = (
-        ('F','Female'),
-        ('M','Male'),
-        ('O','Other')
-    )
-    bdoner_gender   = models.CharField(max_length=1,choices=gender_list, null=True)
-    bdoner_age      = models.IntegerField(null=True)
-    status          = models.BooleanField(default=True)
 
-    def __str__(self):
-        return self.bdoner_name
     
 
     

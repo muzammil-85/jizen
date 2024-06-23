@@ -24,7 +24,7 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="logo">
-                    <a target="_blank" href="{% url 'commonapp:home' %}"><h2>WealCode</h2></a>
+                    <a target="_blank" href="{% url 'commonapp:home' %}"><h2>JIZEN</h2></a>
                 </div>
             </div>
             <div class="col-md-8"> 
@@ -34,18 +34,11 @@
                             <ul>
                                 <li><a href="">Dashboard</a></li> 
                                 </li> 
-                                <li><a href="">Manage Doner  <i class="fa fa-sort-down"></i></a>
-                                    <ul>
-                                        <li><a href="">Add Doner</a></li>
-                                        <li><a href="">Update Doner</a></li>
-                                        <li><a href="">Remove Doner</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="">Manage Application</a></li>
-                                <li><a href="">Logout</a></li>
+                                
+                                <li><a href="{% url 'poorapp:admin_logout' %}">Logout</a></li>
                             </ul>
                         </div> 
-                        <div class="right_menu menu">
+                        <!-- <div class="right_menu menu">
                             <ul>
                                 <li><a href="">Settings <i class="fa fa-sort-down"></i></a>
                                     <ul>
@@ -56,24 +49,18 @@
                                     </ul>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 {% elif request.session.userid %}
                     <div class="top_title doner_menu_area">
                         <div class="left_menu menu">
                             <ul>
                                 <li><a href="{% url 'poorapp:doner_dashboard' %}">Dashboard</a></li>
-                                <li><a href="">Payment <i class="fa fa-sort-down"></i></a>
-                                    <ul>
-                                        <li><a href="">Make Payment</a></li>
-                                        <li><a href="{% url 'poorapp:view_transactions' request.session.userid %}">Payment History</a></li>
-                                    </ul>
-                                </li> 
-                                <li><a href="">Inbox <span>5</span></a></li>
+                                
                                 <li><a href="{% url 'poorapp:doner_logout' %}">Logout</a></li>
                             </ul>
                         </div> 
-                        <div class="right_menu menu">
+                        <!-- <div class="right_menu menu">
                             <ul>
                                 <li><a href="">Settings <i class="fa fa-sort-down"></i></a>
                                     <ul>
@@ -84,7 +71,7 @@
                                     </ul>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                     
                 {% endif %} 
@@ -100,39 +87,25 @@
                 <div class="sidebar">  
                 {% if request.session.admin %}
                     <div class="accordion single_sidebar" id="accordionExample">  
-                        <h3 class="collapsed" data-toggle="collapse" data-target="#one" aria-expanded="true" aria-controls="one"><i class="fa fa-list-ul"></i> Poor People Dashboard</h3>
+                        <h3 class="collapsed" data-toggle="collapse" data-target="#one" aria-expanded="true" aria-controls="one"><i class="fa fa-list-ul"></i> Receiver Dashboard</h3>
 
                         <div id="one" class="dashboard_menu collapse show" data-parent="">
                             <ul>
-                                <li><a href="{% url 'poorapp:poor_list' %}"><i class="fa fa-hand-o-right"></i> Poor People list</a></li>
-                                <li><a id="add_poor" href="{% url 'poorapp:add_poor' %}"><i class="fa fa-hand-o-right"></i> Add new Poor Item</a></li>
-                                <li><a href=""><i class="fa fa-hand-o-right"></i> Poor People Delete</a></li>
+                                <li><a href="{% url 'poorapp:poor_list' %}"><i class="fa fa-hand-o-right"></i> Receiver list</a></li>
+                                <!-- <li><a id="add_poor" href="{% url 'poorapp:add_poor' %}"><i class="fa fa-hand-o-right"></i> Add new Poor Item</a></li> -->
+                                
                             </ul>
                         </div>  
                         <h3 class="collapsed" data-toggle="collapse" data-target="#helper" aria-expanded="true" aria-controls="helper"><i class="fa fa-list-ul"></i> Who are Helping Now</h3>
 
                         <div id="helper" class="dashboard_menu collapse show" data-parent="">
                             <ul>
-                                <li><a href="{% url 'poorapp:doner_list' %}"><i class="fa fa-hand-o-right"></i> Doner List</a></li>
-                                <li><a href=""><i class="fa fa-hand-o-right"></i> View Transaction</a></li>
-                                <li><a href=""><i class="fa fa-hand-o-right"></i> Contact with Doner</a></
+                                <li><a href="{% url 'poorapp:doner_list' %}"><i class="fa fa-hand-o-right"></i> Donor List</a></li>
+                                
                             </ul>
                         </div> 
-                        <h3 class="collapsed" data-toggle="collapse" data-target="#two" aria-expanded="true" aria-controls="two"><i class="fa fa-list-ul"></i> Poor People Dashboard</h3> 
-                        <div id="two" class="dashboard_menu collapse show" data-parent="">
-                            <ul>
-                                <li><a href=""><i class="fa fa-hand-o-right"></i> Poor People list</a></li>
-                                <li><a href=""><i class="fa fa-hand-o-right"></i> Poor People Add</a></li>
-                                <li><a href=""><i class="fa fa-hand-o-right"></i> Poor People Delete</a></li>
-                            </ul>
-                        </div>
-                        <h3 class="collapsed" data-toggle="collapse" data-target="#father_prof" aria-expanded="true" aria-controls="father_prof"><i class="fa fa-list-ul"></i> Father Proffession</h3> 
-                        <div id="father_prof" class="dashboard_menu collapse show" data-parent="">
-                            <ul>
-                                <li><a href="{% url 'poorapp:father_prof_list' %}"><i class="fa fa-hand-o-right"></i>Father Proffession list</a></li>
-                                <li><a id='add_prof' href="{%url 'poorapp:father_prof' %}"><i class="fa fa-hand-o-right"></i>Add New Proffession</a></li> 
-                            </ul>
-                        </div>   
+                        
+                           
                     </div> 
                     {% elif request.session.userid %}
                         <div class="doner_profile_area">
@@ -144,15 +117,11 @@
                                 {% endif %} 
                                 <div class="general_info">
                                     <h2>{{doner.doner_name}}</h2>
-                                    <h3>Member Science:</h3>
+                                    <h3>Member Since:</h3>
                                     <p>{{doner.joining_date}}</p>
-                                    <h3>Total Payment: </h2> 
-                                    {% for payment in total_payment|my_paymenbt:request.session.userid %}
-                                        <ul>
-                                            <li><a href="{{payment.id}}"><strong>{{payment.payment_to}}</strong> {{payment.payment_amount}}</a> </li>  
-                                        </ul>  
-                                    {% endfor %} 
-                                    <a href="{% url 'poorapp:view_transactions' request.session.userid %}" class="btn btn-success btn-sm">View All Transactions</a>
+                                    <h3>Transactions: </h2> 
+                                    
+                                    <a href="{% url 'poorapp:view_transactions' request.session.userid %}" class="btn btn-success btn-sm">View Money Transactions</a>
                                     <h3>Total Amount</h3> 
                                     <p><strong>{{ total_payments|total_payment:request.session.userid }}</strong></p>   
                                 </div>
@@ -178,18 +147,7 @@
         </div> 
     </div> 
 </section>
-<footer class="footer_area fixed-bottom">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="copytext">
-                    <p>This project is done by Habibur Rahman</p>
-                   
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+
 
 <script> 
   

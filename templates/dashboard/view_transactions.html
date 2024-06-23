@@ -4,8 +4,8 @@
     <div class="transaction_title pbottom-30 ptop-10"> 
          <h2 class="width-40 float-left">All transactions</h2> 
          <ul>
-             <li><a href="">Download PDF</a></li>
-             <li><a href="{% url 'poorapp:csv_doner_transaction_import' request.session.userid %}">Export CSV</a></li>
+             
+             <li><a href="{% url 'poorapp:csv_doner_transaction_import' request.session.userid %}" class="btn btn-success text-white">Export CSV</a></li>
          </ul>
     </div>  
 

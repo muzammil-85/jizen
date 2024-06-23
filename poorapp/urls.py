@@ -17,6 +17,11 @@ urlpatterns = [
     path('bind-country-wise-city/', views.bind_country_wise_city, name='bind_country_wise_city'),
     path('doner-login-history/<int:doner_id>', views.doner_login_history, name='doner_login_history'),
     path('doner-password-change/<int:doner_id>', views.doner_password_change, name='doner_password_change'),
+    path("doner-list/", views.doner_list, name="doner_list"),
+    path('doner/list-approve/<int:donor_id>', views.donor_lists_approve, name='doner-approved'),
+    path('doner/list-complete/<int:donor_id>', views.donor_lists_completed, name='doner-completed'),
+    
+
 
     path('poor/add-poor-item', views.add_poor_list, name='add_poor'),
     path('poor/add-father-proffession', views.add_father_proffession, name='father_prof'),
@@ -28,10 +33,12 @@ urlpatterns = [
     path('poor/poor-list-inactive', views.poor_lists_inactive, name='poor_list_inactive'),
     path('poor/poor-list-pending', views.poor_lists_pending, name='poor_list_pending'),
     path('poor/list-approve/<int:poor_id>', views.poor_lists_approve, name='approveed'),
+    path('poor/list-disapprove/<int:poor_id>', views.poor_lists_disapprove, name='disapproveed'),
+    path('poor/list-complete/<int:poor_id>', views.poor_lists_completed, name='completed'),
     path('poor/poor-list-complete', views.poor_lists_complete, name='poor_list_complete'),  
     path('admin-login/', views.admin_login, name='admin_login'),  
+    path('admin-logout/', views.admin_logout, name='admin_logout'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'), 
-    path("doner-list/", views.doner_list, name="doner_list"),
     
 
 ]

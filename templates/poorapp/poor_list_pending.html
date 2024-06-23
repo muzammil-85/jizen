@@ -8,22 +8,13 @@
 {% block dashboard %} 
     <div class="dashboard_topbar">
         <div class="row">
-            <div class="col-sm-4">
-                <div class="dashboar_top_title">
-                    <a class="link fsize-20 fweight-600" href="{% url 'poorapp:father_prof' %}"><i class="fa fa-hand-o-right"></i> Add New Poor People</a>
-                </div>
-                
-            </div> 
+            
             <div class="col-sm-4">
                 <h2 class="fweight-600 fsize-24 align-center">
                     Total Pending People
                 </h2>
             </div>
-            <div class="col-sm-4">
-                <div class="dashboar_top_title align-right">
-                    <a class="link fsize-20 fweight-600" href=""><i class="fa fa-hand-o-right"></i> Search Poor Plople</a>
-                </div>
-            </div>
+            
         </div>
     </div>  
     <hr>
@@ -41,14 +32,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-sm-5">
-                    <div class="custom_search">
-                        <form action="">
-                            <input type="text" name="s" placeholder="Search By Name" class="form-control">
-                            <input type="submit" class="btn btn-success" value="Search">
-                        </form>
-                    </div> 
-                </div>
+                
             </div>
         </div>  
         {% if poor_list_pending %} 
@@ -59,9 +43,7 @@
                     <th>Name</td>
                     <th>Proffession</td>
                     <th>Help Type</td>
-                    <th>Amount</td>
                     <th>Collection Date</td>  
-                    <th>Status</td>  
                     <th class="align-center">Action</td>
                 </tr>
             </thead>
@@ -72,19 +54,14 @@
                         <td>{{poor.name}}</td>
                         <td>{{poor.aplicant_proffessions}}</td>
                         <td>{{poor.help_type}}</td>
-                        <td>{{poor.amount}}</td>
                         <td>{{poor.require_date}}</td>
                         
-                        {% if poor.status and poor.complete_status == False%}
-                            <td style="color:yellow">Active</td>   
-                        {% else %}
-                            <td style="color: red;">Inactive</td>
-                        {% endif %} 
+                        
                         <td class="action light width-30 align-center">
                             <a style="text-decoration: none;bordar-radious:3px;" href="{% url 'poorapp:approveed' poor.id %}">Approve</a> 
-                            <a href=""><i class="fa fa-eye"></i></a> 
-                            <a href=""><i class="fa fa-edit"></i></a> 
-                            <a onclick="sure_delete()" href=""><i class="fa fa-trash-o"></i></a>
+                            <a href="{% url 'commonapp:single_poor_people' poor.id %}"><i class="fa fa-eye"></i></a> 
+                           
+                            <!-- <a onclick="sure_delete()" href=""><i class="fa fa-trash-o"></i></a> -->
                         </td>
                     </tr>
                     {% endfor %}   

@@ -8,22 +8,13 @@
 {% block dashboard %} 
     <div class="dashboard_topbar">
         <div class="row">
-            <div class="col-sm-4">
-                <div class="dashboar_top_title">
-                    <a class="link fsize-20 fweight-600" href="{% url 'poorapp:father_prof' %}"><i class="fa fa-hand-o-right"></i> Add New Poor People</a>
-                </div>
-                
-            </div> 
+             
             <div class="col-sm-4">
                 <h2 class="fweight-600 fsize-24 align-center">
                     Total People
                 </h2>
             </div>
-            <div class="col-sm-4">
-                <div class="dashboar_top_title align-right">
-                    <a class="link fsize-20 fweight-600" href=""><i class="fa fa-hand-o-right"></i> Search Poor Plople</a>
-                </div>
-            </div>
+            
         </div>
     </div>  
     <hr>
@@ -43,8 +34,8 @@
                 </div>
                 <div class="col-sm-5">
                     <div class="custom_search">
-                        <form action="">
-                            <input type="text" name="s" placeholder="Search By Name" class="form-control">
+                        <form action="{% url 'commonapp:search_poor_admin' %}" method="POST">{% csrf_token %}
+                            <input type="text" name="search" placeholder="Search By Name" class="form-control">
                             <input type="submit" class="btn btn-success" value="Search">
                         </form>
                     </div> 
@@ -59,9 +50,7 @@
                     <th>Name</td>
                     <th>Proffession</td>
                     <th>Help Type</td>
-                    <th>Amount</td>
                     <th>Collection Date</td>  
-                    <th>Status</td>  
                     <th class="align-center">Action</td>
                 </tr>
             </thead>
@@ -73,18 +62,12 @@
                         <td>{{poor.name}}</td>
                         <td>{{poor.aplicant_proffessions}}</td>
                         <td>{{poor.help_type}}</td>
-                        <td>{{poor.amount}}</td>
                         <td>{{poor.require_date}}</td>
                         
-                        {% if poor.status and poor.complete_status == False%}
-                            <td style="color:lime">Active</td>   
-                        {% else %}
-                            <td style="color: green;">Inactive</td>
-                        {% endif %} 
+                        
                         <td class="action light width-20 align-center">
                             <a target="_blank" href="{% url 'commonapp:single_poor_people' poor.id %}"><i class="fa fa-eye"></i></a> 
-                            <a href=""><i class="fa fa-edit"></i></a> 
-                            <a onclick="sure_delete()" href=""><i class="fa fa-trash-o"></i></a>
+                            
                         </td>
                     </tr>
                     {% endfor %}  
@@ -93,9 +76,5 @@
         </tbody>
         </table> 
     </div>
-    <script>
-        function sure_delete(){
-            alert("Do you want to delte");
-        }
-    </script>
+    
 {% endblock dashboard %}

@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3 login_forms">
-                <h2 class="text-center card-title">Doner Login Area</h2>
+                <h2 class="text-center card-title">Donor Login Area</h2>
                 <br>
                 
                 {% if messages %}
@@ -28,12 +28,12 @@
                         <input type="text" name='email_phone' id="user_mobile" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="donner_password">Doner Password</label>
+                        <label for="donner_password">Donor Password</label>
                         <input type="password" name='donner_password' id="donner_password" class="form-control" required>
                     </div>
                     <div class="submit_button form-group"> 
-                        <input type="submit" value="Login as Doner" class="btn btn-lg btn-success"> 
-                        <p>Don't have Doner Account? <a href="Register">Register</a> as Doner</p>
+                        <input type="submit" value="Login as Donor" class="btn btn-lg btn-success"> 
+                        <p>Don't have Donor Account? <a href="{% url 'poorapp:doner_register' %}">Register</a> as Donor</p>
                     </div>
                 </form>
             </div>

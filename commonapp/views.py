@@ -15,17 +15,17 @@ from django.views.generic import View
 from .utils import render_to_pdf
 from django.template.loader import get_template
 from django.db.models import Q
-
+from django.core.mail import send_mail
 
 
 def Homepage(request): 
     help_category = models.HelpCategory.objects.all()
     district_list = models.DistrictList.objects.all()
-    poor_item = models.PoorPeople.objects.filter(status=True).order_by('-timestamp')
+    poor_item = models.Receivers.objects.filter(status=True).order_by('-timestamp')
     context = {
         'help_category':help_category,
         'district_list':district_list,
-        'poor_item':poor_item
+        'poor_item':poor_item 
     }
 
     return render(request, 'commonapp/home_page.html',context)
@@ -33,17 +33,17 @@ def Homepage(request):
 def Userlog(request):
     return render(request, 'commonapp/user_login.html')
 
-def blood_doner_login(request):
-    return render(request, 'commonapp/blood_doner_login.html')
 
-def single_poor_people(request,poor_id):
-    poor = models.PoorPeople.objects.filter(id=poor_id).first()
+def single_poor_people(request, poor_id):
+    poor = models.Receivers.objects.filter(id=poor_id).first()
     help_category = models.HelpCategory.objects.all()  
     context = {
-        'help_category':help_category, 
-        'poor':poor
+        'help_category': help_category, 
+        'poor': poor
     }
-    return render(request,'commonapp/single_poor_people.html',context)
+    return render(request, 'commonapp/single_poor_people.html', context)
+
+
 
 def application_form(request):
     if request.method == 'POST':
@@ -56,24 +56,21 @@ def application_form(request):
         aplicant_proffession = int(request.POST['aplicant_proffession'])
         gender = request.POST['gender']
         age = request.POST['age']
-        blood_group = request.POST['blood_group'] 
         applicant_image = request.FILES['applicant_image']
         fname = applicant_files.save(applicant_image.name, applicant_image)
         upload_file_url = applicant_files.url(fname)   
-
         father_name = request.POST['father_name']
         father_proffession = int(request.POST['father_proffession'])
         father_mobile = request.POST['father_mobile']
         mother_name = request.POST['mother_name']
         help_type = int(request.POST['help_type'])
-        amount = request.POST['amount']
+        print(help_type)
         require_date = request.POST['require_date']
         district_list = int(request.POST['district_list'])
         city_list = request.POST['city_list']
         post_code = request.POST['post_code']
         address = request.POST['address']
-        payment_type = int(request.POST['payment_type'])
-        account_number = request.POST['account_number']
+        
         itendity_type = request.POST['itendity_type'] 
         identity_file = request.FILES['identity_file']
         fname_doc = applicant_files.save(identity_file.name, identity_file)
@@ -84,45 +81,117 @@ def application_form(request):
         fname1 = applicant_files.save(doc_file_one.name, doc_file_one)
         upload_file_url = applicant_files.url(fname1)  
 
-        doc_file_two = request.FILES['doc_file_two']
-        fname2 = applicant_files.save(doc_file_two.name, doc_file_two)
-        upload_file_url = applicant_files.url(fname2)  
+        problem_description = request.POST['problem_description']
+        edu_items = ''
+        payment_type = None
+        account_number = 0
+        amount=0
+        cloth_count=0
+        cloth_size=''
+        food_quantity=0
+        food_time=None
+        print(help_type)
+        if(help_type==3):
+            amount = request.POST['amount']
+            payment_type = int(request.POST['payment_type'])
+            account_number = request.POST['account_number']
+        elif(help_type==1):
+            edu_items = request.POST['amount']
+        elif(help_type==2):
+            cloth_count = int(request.POST['amount'])
+            cloth_size = request.POST['payment_type']
+        elif(help_type==6):
+            food_quantity = int(request.POST['amount'])
+            food_time = request.POST['food_time']
 
-        doc_file_three = request.FILES['doc_file_three']
-        fname3 = applicant_files.save(doc_file_three.name, doc_file_three)
-        upload_file_url = applicant_files.url(fname3) 
-
-        problem_description = request.POST['problem_description'] 
-        
-        models.PoorPeople.objects.create(name=name,email=email,mobile_number=phone, aplicant_proffessions_id=aplicant_proffession, aplicant_gender=gender, aplicant_age=age, image=applicant_image, father_name=father_name, father_proffession_id=father_proffession, father_contact_number=father_mobile, mother_name=mother_name, blood_group=blood_group, help_type_id=help_type, amount=amount, require_date=require_date, city_name_id=city_list, district_name_id=district_list, post_code=post_code, address=address, payment_type_id=payment_type, payment_type_account=account_number, identity_doc_type=itendity_type, identity_doc=identity_file, identity_doc_number=identity_number, document_file_one=doc_file_one, document_file_two=doc_file_two, document_file_three=doc_file_three, problem_description=problem_description)
-        messages.success(request,'Thank you {} for your registration, login using your contact Number and password is "123456"'.format(name))
+        models.Receivers.objects.create(name=name,food_time=food_time,food_quantity=food_quantity,cloth_count=cloth_count,cloth_size=cloth_size,edu_items=edu_items,email=email,mobile_number=phone, aplicant_proffessions_id=aplicant_proffession, aplicant_gender=gender, aplicant_age=age, image=applicant_image, father_name=father_name, father_proffession_id=father_proffession, father_contact_number=father_mobile, mother_name=mother_name, help_type_id=help_type, amount=amount, require_date=require_date, city_name_id=city_list, district_name_id=district_list, post_code=post_code, address=address, payment_type_id=payment_type, payment_type_account=account_number, identity_doc_type=itendity_type, identity_doc=identity_file, identity_doc_number=identity_number, document_file_one=doc_file_one, problem_description=problem_description)
+        messages.success(request,'Thank you {} for your registration, We will Review your application and contact you soon!!"'.format(name))
         return redirect('commonapp:thank_you_register')
     else:
-        blood_group         = models.BlodGroup.objects.all()
         my_proffession      = models.ApplicantProffession.objects.all()
         father_proffession  = models.FatherProffession.objects.all()
-        help_type           = models.HelpCategory.objects.all()
         district_list       = models.DistrictList.objects.all()
-        payment_type       = models.PaymentType.objects.filter(status=True)
+        city_list           = models.CityList.objects.all()
+        payment_type        = models.PaymentType.objects.filter(status=True)
+
+        # Check if the required HelpCategory instances exist
+        clothes_help, created = models.HelpCategory.objects.get_or_create(category_name='I need Clothes')
+        education_help, created = models.HelpCategory.objects.get_or_create(category_name='Educational Help')
+        food_help, created = models.HelpCategory.objects.get_or_create(category_name='I need Food')
+
+        # Get the IDs of the required HelpCategory instances
+        clothes_help_id = clothes_help.id
+        education_help_id = education_help.id
+        food_help_id = food_help.id
+
+        help_type = models.HelpCategory.objects.all()
+
         context = {
-            'my_proffession':my_proffession,
-            'blood_group':blood_group,
-            'father_proffession':father_proffession,
-            'help_type':help_type,
-            'district_list':district_list,
-            'payment_type':payment_type,
+            'my_proffession': my_proffession,
+            'father_proffession': father_proffession,
+            'help_type': help_type,
+            'district_list': district_list,
+            'payment_type': payment_type,
+            'city_list': city_list,
+            'clothes_help_id': clothes_help_id,
+            'education_help_id': education_help_id,
+            'food_help_id': food_help_id,
         }
  
-    return render(request,'commonapp/application_form.html',context)
+    return render(request, 'commonapp/application_form.html', context)
 
-def thank_you_register(request): 
+def thank_you_register(request):
+    
     return render(request,'commonapp/thank_you_register.html')
+def thank_you_cloth(request,donor_id):
+    ob = models.Doner.objects.get(id = donor_id)
+    ob.request = True
+    ob.save()
+    return render(request,'commonapp/thank_you_cloth.html')
 
+def thank_you_edu(request,donor_id): 
+    ob = models.Doner.objects.get(id = donor_id)
+    ob.request = True
+    ob.save()
+    return render(request,'commonapp/thank_you_edu.html')
+
+def thank_you_food(request,donor_id): 
+    ob = models.Doner.objects.get(id = donor_id)
+    ob.request = True
+    ob.save()
+    return render(request,'commonapp/thank_you_food.html')
+
+
+def contact_support(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+
+        # Construct the email message
+        email_subject = f"Support Request: {subject}"
+        email_message = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+
+        try:
+            # Send the email
+            send_mail(
+                email_subject,
+                email_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.SUPPORT_EMAIL],
+            )
+            messages.success(request, "Your message has been sent successfully.")
+            return JsonResponse(request, messages)
+        except Exception as e:
+           print(e)
+
+    return render(request, 'commonapp/contact_support.html')
 
 def search_poor(request):
     
-    qs = models.PoorPeople.objects.all()
-    qs = qs.filter(status=True)
+    qs = models.Receivers.objects.all()
+    qs = qs.filter(complete_status=False,status=True)
     name = request.POST.get('search')
     district = request.POST.get('district')
     city = request.POST.get('city')
@@ -157,6 +226,22 @@ def search_poor(request):
     return render(request, 'commonapp/search_poor.html',context)
 
 
+
+def search_poor_admin(request):
+    
+    qs = models.Receivers.objects.all()
+    qs = qs.filter(status=True)
+    name = request.POST.get('search')
+    
+
+    if name !="" and name != None:
+        qs = qs.filter(name__icontains=name) 
+
+    context = { 
+        'all_poor_list':qs,
+
+    }
+    return render(request, 'poorapp/poor_list_all.html',context)
 
 
 
@@ -203,7 +288,7 @@ def districtwise_city_search(request):
 
 def bind_identity_type(request):  
     itendity_type = request.GET.get('itendity_type')
-    doct_type   = models.PoorPeople.objects.filter(identity_doc_type = itendity_type).first()
+    doct_type   = models.Receivers.objects.filter(identity_doc_type = itendity_type).first()
     print(doct_type)
     context = {
         'doct_type':doct_type
@@ -213,71 +298,3 @@ def bind_identity_type(request):
 def bind_district_city(request):
     return render(request, 'commonapp/bind_identity_type.html')
 
-def register_blood_doner(request): 
-    blood_doner = models.BlodGroup.objects.all()
-    disttrict_list = models.DistrictList.objects.all()
-    if request.method=="POST":
-        name = request.POST['doner_name']
-        bdoner_phone = request.POST['bdoner_phone']
-        bdoner_pass = request.POST['bdoner_pass']
-        bdoner_age = request.POST['bdoner_age']
-        gender = request.POST['gender']
-        blood_group = int(request.POST['blood_group'])
-        donate_date = request.POST['donate_date']
-        district = int(request.POST['district'])
-        city_id = int(request.POST['city'])
-
-        models.BloodDoner.objects.create(bdoner_name=name, blood_group_id=blood_group, last_donate_date=donate_date, bdoner_phone=bdoner_phone, bdoner_pass=bdoner_pass, bdoner_district_id=district, bdoner_city_id=city_id, bdoner_gender=gender, bdoner_age=bdoner_age)
-        messages.success(request,"Register as blood doner successfully")
-        return redirect('commonapp:blood_doner_login')
-    context = {
-        'blood_doner':blood_doner,
-        'disttrict_list':disttrict_list
-    }
-    return render(request,'commonapp/register_blood_doner.html',context)
-
-def blood_doner_list(request):  
-    name = request.GET.get('doner_name',False) 
-    district = request.GET.get('district',False) 
-    city = request.GET.get('city',False) 
-    blood_type = request.GET.get('blood_type',False) 
-    if name:
-        if district:
-            if city:
-                if blood_type:
-                    search_result = models.BloodDoner.objects.filter(bdoner_name__icontains=name,bdoner_district=district,bdoner_city=city,blood_group=blood_type) 
-                else:
-                    search_result = models.BloodDoner.objects.filter(bdoner_name__icontains=name,bdoner_district=district,bdoner_city=city) 
-            else:
-                search_result = models.BloodDoner.objects.filter(bdoner_name__icontains=name,bdoner_district=district) 
-        else:
-            search_result = models.BloodDoner.objects.filter(bdoner_name__icontains=name)
-
-        blood_group = models.BlodGroup.objects.all()
-        district_list = models.DistrictList.objects.all()
-        counts = search_result.count()
-        if counts > 0:  
-            message = '1'
-        else:
-            message = '0'
-        if district:
-            district = int(district)
-        context = {
-            'blood_search':search_result,
-            'search_result':search_result,
-            'blood_group':blood_group,
-            'district_list':district_list,
-            'message':message,
-            'name':name,
-            'district':district
-        }
-    else:
-        blood_group = models.BlodGroup.objects.all()
-        district_list = models.DistrictList.objects.all()
-        blood_search = models.BloodDoner.objects.all()
-        context = {
-            'blood_search':blood_search,
-            'blood_group':blood_group,
-            'district_list':district_list,
-        } 
-    return render(request,'commonapp/blood_doner_list.html',context)

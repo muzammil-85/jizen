@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <div class="logo">
-                            <h2>WealCode</h2>
+                            <h2>JIZEN</h2>
                         </div>
                     </div>
                     <div class="col-md-9"> 
@@ -32,19 +32,19 @@
                                 <li><a href="{% url 'commonapp:home' %}">Home</a></li>
                                 <li><a href="">Login</a>
                                     <ul>
-                                        <li><a href="{% url 'poorapp:doner_login' %}">Login As Doner</a></li>
-                                        <li><a href="">Login As Applicant</a></li>
-                                        <li><a href="{% url 'commonapp:blood_doner_login' %}">Login As Blood Doner</a></li>
+                                        <li><a href="{% url 'poorapp:doner_login' %}">Login As Donor</a></li>
+                                       
                                         <li><a href="{% url 'poorapp:admin_login' %}">Admin Login</a></li>
                                     </ul>
                                 </li> 
-                                <li><a href="{% url 'commonapp:blood_doner_list' %}">Blood Search</a></li>
+                                
                                 <li><a href="">Register</a>
                                     <ul>
-                                        <li><a href="{% url 'commonapp:register_blood_doner' %}">Register as Blood Doner</a></li>
-                                        <li><a href="{% url 'poorapp:doner_register' %}">Register as Doner</a></li>
+                                        <li><a href="{% url 'poorapp:doner_register' %}">Register as Donor</a></li>
                                     </ul>
-                                </li> 
+                                </li>
+                                <li><a href="{% url 'commonapp:contact_support' %}">Contact Support</a></li>
+
                                 <li><a class="float-right" href="{% url 'commonapp:application_form' %}">Apply for Help</a></li>
                             </ul>
                         </div>

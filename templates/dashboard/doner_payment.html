@@ -11,6 +11,8 @@
         <div class="row">
             
             {% for poor in poor_item %} 
+            {% if not poor.complete_status %}
+
                 <div class="col-sm-4">
                     <div class="single_poor">  
                         <h1>{{poor.name}}</h1> 
@@ -19,20 +21,53 @@
                             <li><strong>Mobile Number</strong>: <a href="tel:{{poor.mobile_number}}">{{poor.mobile_number}}</a></li>
                             <li><strong>District</strong>: {{poor.city_name.district}}</li>
                             <li><strong>City</strong>: {{poor.city_name}}</li>
-                            <li><strong>Acount Required</strong>: {{poor.amount}}</li>
-                            <li><strong>Amount Received</strong>: {{poor.amount_received}}</li>
-                            <li><strong>Require Date</strong>: {{poor.require_date}}</li>
-                            <li><strong>Amount Need</strong>: {{total_payments|make_payment:poor}}</li> 
+                            {% if poor.help_type.id == 3 %}
+                                            <li><strong>Acount Required</strong>: {{poor.amount}}</li>
+                                            <li><strong>Amount Received</strong>: {{poor.amount_received}}</li>
+                                            <li><strong>Amount Need</strong>: {{total_payments|make_payment:poor}}</li> 
+                                            
+                                        {% elif poor.help_type.id == 1 %}
+                            
+                                            <li><strong>Educational Items</strong>: {{ poor.edu_items }}</li>
+                                        {% elif poor.help_type.id == 2 %}
+                                            <li><strong>Cloth Count </strong>: {{ poor.cloth_count }}</li>
+                                            <li><strong>Cloth Size </strong>: {{ poor.cloth_size }}</li>
+                                        {% elif poor.help_type.id == 6 %}
+                                            <li><strong>Food Quantity </strong>: {{ poor.food_quantity }}</li>
+                                            <li><strong>Food Time </strong>: {{ poor.food_time }}</li>
+                                        {% endif %}
+                            <li><strong>Require Date</strong>: {{poor.require_date}}</li> 
 
                         </ul>
                         <div class="btn_area">
                             <ul>
-                                <li><a class="btn btn-success btn-sm float-left" href="">View Application</a></li>
-                                <li><a class="btn btn-secondary btn-sm float-right" href="{% url 'poorapp:make_payment' poor.id %}">Make Payment</a></li>
+                                <li><a class="btn btn-success btn-sm float-left" href="{% url 'commonapp:single_poor_people' poor.id %}">View Application</a></li>
+                                
+
+                                {% if poor.help_type.id == 3 %}
+                                <li><a class="btn btn-secondary btn-sm float-right" href="{% url 'poorapp:make_payment' poor.id %}">Make Donation</a></li>
+
+                                
+                            {% elif poor.help_type.id == 1 %}
+                            <li><a class="btn btn-secondary btn-sm float-right" href="{% url 'commonapp:thank_you_edu' doner_id%}">Make Donation</a></li>
+                
+                            {% elif poor.help_type.id == 2 %}
+                            <li><a class="btn btn-secondary btn-sm float-right" href="{% url 'commonapp:thank_you_cloth' doner_id%}">Make Donation</a></li>
+
+                               
+                            {% elif poor.help_type.id == 6 %}
+                            <li><a class="btn btn-secondary btn-sm float-right" href="{% url 'commonapp:thank_you_food' doner_id%}">Make Donation</a></li>
+
+                               
+                            {% endif %}
+
+
                             </ul>
                         </div>
                     </div>
                 </div>
+                
+            {% endif %}
             {% endfor %}
         </div>
     </div>

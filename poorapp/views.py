@@ -11,6 +11,9 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth import authenticate
 from django.contrib import messages  
+from dotenv import load_dotenv
+
+load_dotenv() 
 # Create your views here.
 # def user_login(request):
 #     if request.method == 'POST':
@@ -31,14 +34,79 @@ def get_client_ip(request):
             ip = proxies[0]
     print(ip)
     return ip
-def Dashboard(request):
-    # if request.session['userid'] == None:
-    #     return redirect('poorapp:doner_login')
-    return render(request,'dashboard/dashboard.html')
+def Dashboard(request): 
+    if request.session['userid'] == None:
+        return redirect('poorapp:doner_login')
+    return render(request,'dashboard/admin_dashboard.html')
 
-def add_poor_list(request):  
-    template = 'poorapp/add_new_poor.html'
-    return render(request,template)
+def add_poor_list(request):
+    if request.method == 'POST':
+         
+        applicant_files = FileSystemStorage()
+
+        name = request.POST['name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        aplicant_proffession = int(request.POST['aplicant_proffession'])
+        gender = request.POST['gender']
+        age = request.POST['age']
+        applicant_image = request.FILES['applicant_image']
+        fname = applicant_files.save(applicant_image.name, applicant_image)
+        upload_file_url = applicant_files.url(fname)   
+
+        father_name = request.POST['father_name']
+        father_proffession = int(request.POST['father_proffession'])
+        father_mobile = request.POST['father_mobile']
+        mother_name = request.POST['mother_name']
+        help_type = int(request.POST['help_type'])
+        amount = request.POST['amount']
+        require_date = request.POST['require_date']
+        district_list = int(request.POST['district_list'])
+        city_list = request.POST['city_list']
+        post_code = request.POST['post_code']
+        address = request.POST['address']
+        payment_type = int(request.POST['payment_type'])
+        account_number = request.POST['account_number']
+        itendity_type = request.POST['itendity_type'] 
+        identity_file = request.FILES['identity_file']
+        fname_doc = applicant_files.save(identity_file.name, identity_file)
+        upload_file_url = applicant_files.url(fname_doc)  
+
+        identity_number = request.POST['identity_number']
+        doc_file_one = request.FILES['doc_file_one']
+        fname1 = applicant_files.save(doc_file_one.name, doc_file_one)
+        upload_file_url = applicant_files.url(fname1)  
+
+        doc_file_two = request.FILES['doc_file_two']
+        fname2 = applicant_files.save(doc_file_two.name, doc_file_two)
+        upload_file_url = applicant_files.url(fname2)  
+
+        doc_file_three = request.FILES['doc_file_three']
+        fname3 = applicant_files.save(doc_file_three.name, doc_file_three)
+        upload_file_url = applicant_files.url(fname3) 
+
+        problem_description = request.POST['problem_description'] 
+        
+        models.Receivers.objects.create(name=name,email=email,mobile_number=phone, aplicant_proffessions_id=aplicant_proffession, aplicant_gender=gender, aplicant_age=age, image=applicant_image, father_name=father_name, father_proffession_id=father_proffession, father_contact_number=father_mobile, mother_name=mother_name, help_type_id=help_type, amount=amount, require_date=require_date, city_name_id=city_list, district_name_id=district_list, post_code=post_code, address=address, payment_type_id=payment_type, payment_type_account=account_number, identity_doc_type=itendity_type, identity_doc=identity_file, identity_doc_number=identity_number, document_file_one=doc_file_one, document_file_two=doc_file_two, document_file_three=doc_file_three, problem_description=problem_description)
+        messages.success(request,'Thank you {} for your registration, We will Review your application and contact you soon!!"'.format(name))
+        return redirect('commonapp:thank_you_register')
+    else:
+        my_proffession      = models.ApplicantProffession.objects.all()
+        father_proffession  = models.FatherProffession.objects.all()
+        help_type           = models.HelpCategory.objects.all()
+        district_list       = models.DistrictList.objects.all()
+        payment_type       = models.PaymentType.objects.filter(status=True)
+        city_list = models.CityList.objects.all()
+        context = {
+            'my_proffession':my_proffession,
+            'father_proffession':father_proffession,
+            'help_type':help_type,
+            'district_list':district_list,
+            'city_list':city_list,
+            'payment_type':payment_type,
+        }
+ 
+    return render(request,'poorapp/add_new_poor.html',context)
 
 def add_father_proffession(request):
     if request.method == 'POST':
@@ -80,12 +148,22 @@ def edit_father_proffession(request,prof_id):
     return render(request, template,context)
 
 def poor_lists_all(request):
-    all_poor_list = models.PoorPeople.objects.all()  
-    poor_list_active = models.PoorPeople.objects.filter(status=True,complete_status=False).order_by('timestamp').count()
-    poor_list_inactive = models.PoorPeople.objects.filter(status=False).order_by('timestamp').count()
-    poor_list_pending = models.PoorPeople.objects.filter(complete_status=False,status=False).order_by('timestamp').count()
-    poor_list_complete = models.PoorPeople.objects.filter(complete_status=True).order_by('timestamp').count()
+    all_poor_list = models.Receivers.objects.all()  
+    poor_list_active = models.Receivers.objects.filter(status=True,complete_status=False).order_by('timestamp').count()
+    poor_list_inactive = models.Receivers.objects.filter(status=False).order_by('timestamp').count()
+    poor_list_pending = models.Receivers.objects.filter(complete_status=False,status=False).order_by('timestamp').count()
+    poor_list_complete = models.Receivers.objects.filter(complete_status=True).order_by('timestamp').count()
     total_poor = all_poor_list.count()
+    poor_people = models.Receivers.objects.all()
+    for i in poor_people:
+        if i.complete_status == False:
+            if i.help_type==3:
+                need = i.amount-i.amount_received
+                if need <= 0:
+                    i.complete_status = True
+                    i.save()
+           
+        
     context = {
         'poor_list_active':poor_list_active,
         'poor_list_inactive':poor_list_inactive,
@@ -98,11 +176,11 @@ def poor_lists_all(request):
     
 
 def poor_lists_active(request):
-    all_poor_list = models.PoorPeople.objects.all().count()
-    poor_list_active = models.PoorPeople.objects.filter(status=True,complete_status=False).order_by('timestamp')
-    poor_list_inactive = models.PoorPeople.objects.filter(status=False).order_by('timestamp').count()
-    poor_list_pending = models.PoorPeople.objects.filter(complete_status=False,status=False).order_by('timestamp').count()
-    poor_list_complete = models.PoorPeople.objects.filter(complete_status=True).order_by('timestamp').count()
+    all_poor_list = models.Receivers.objects.all().count()
+    poor_list_active = models.Receivers.objects.filter(status=True,complete_status=False).order_by('timestamp')
+    poor_list_inactive = models.Receivers.objects.filter(status=False).order_by('timestamp').count()
+    poor_list_pending = models.Receivers.objects.filter(complete_status=False,status=False).order_by('timestamp').count()
+    poor_list_complete = models.Receivers.objects.filter(complete_status=True).order_by('timestamp').count()
     total_active = poor_list_active.count()
     context = {
         'poor_list':poor_list_active,
@@ -115,11 +193,11 @@ def poor_lists_active(request):
     return render(request,'poorapp/poor_list_active.html',context) 
 
 def poor_lists_inactive(request): 
-    total = models.PoorPeople.objects.all().count()
-    poor_list_active = models.PoorPeople.objects.filter(status=True,complete_status=False).order_by('timestamp').count()
-    poor_list_inactive = models.PoorPeople.objects.filter(status=False).order_by('timestamp')
-    poor_list_pending = models.PoorPeople.objects.filter(complete_status=False,status=False).order_by('timestamp').count()
-    poor_list_complete = models.PoorPeople.objects.filter(complete_status=True).order_by('timestamp').count()
+    total = models.Receivers.objects.all().count()
+    poor_list_active = models.Receivers.objects.filter(status=True,complete_status=False).order_by('timestamp').count()
+    poor_list_inactive = models.Receivers.objects.filter(status=False).order_by('timestamp')
+    poor_list_pending = models.Receivers.objects.filter(complete_status=False,status=False).order_by('timestamp').count()
+    poor_list_complete = models.Receivers.objects.filter(complete_status=True).order_by('timestamp').count()
     total_inactive = poor_list_inactive.count()
     context = {
         'poor_list':poor_list_inactive,
@@ -132,11 +210,11 @@ def poor_lists_inactive(request):
     return render(request,'poorapp/poor_list_inactive.html',context)
 
 def poor_lists_pending(request):
-    total = models.PoorPeople.objects.all().count()
-    poor_list_active = models.PoorPeople.objects.filter(status=True,complete_status=False).order_by('timestamp').count()
-    poor_list_inactive = models.PoorPeople.objects.filter(status=False).order_by('timestamp').count()
-    poor_list_pending = models.PoorPeople.objects.filter(complete_status=False,status=False).order_by('timestamp')
-    poor_list_complete = models.PoorPeople.objects.filter(complete_status=True).order_by('timestamp').count()
+    total = models.Receivers.objects.all().count()
+    poor_list_active = models.Receivers.objects.filter(status=True,complete_status=False).order_by('timestamp').count()
+    poor_list_inactive = models.Receivers.objects.filter(status=False).order_by('timestamp').count()
+    poor_list_pending = models.Receivers.objects.filter(complete_status=False,status=False).order_by('timestamp')
+    poor_list_complete = models.Receivers.objects.filter(complete_status=True).order_by('timestamp').count()
     total_pending = poor_list_pending.count()
     context = {
         'poor_list_inactive':poor_list_inactive,
@@ -149,18 +227,44 @@ def poor_lists_pending(request):
     return render(request,'poorapp/poor_list_pending.html',context)
 
 def poor_lists_approve(request,poor_id):
-    ob = models.PoorPeople.objects.get(id = poor_id)
+    ob = models.Receivers.objects.get(id = poor_id)
     ob.status = True
     ob.save()
     return redirect('poorapp:poor_list_pending')
 
+
+def donor_lists_approve(request,donor_id):
+    ob = models.Doner.objects.get(id = donor_id)
+    ob.status = True
+    ob.save()
+    return redirect('poorapp:doner_list')
+def donor_lists_completed(request,donor_id):
+    ob = models.Doner.objects.get(id = donor_id)
+    
+    ob.complete= True
+    ob.save()
+    return redirect('poorapp:doner_list')
+
+def poor_lists_disapprove(request,poor_id):
+    ob = models.Receivers.objects.get(id = poor_id)
+    ob.status = False
+    ob.save()
+    return redirect('poorapp:poor_list_pending')
+
+def poor_lists_completed(request,poor_id):
+    ob = models.Receivers.objects.get(id = poor_id)
+    ob.complete_status = True
+    ob.save()
+    return redirect('poorapp:poor_list_pending')
+
 def poor_lists_complete(request):
-    poor_list_all = models.PoorPeople.objects.all().count()
-    poor_list_active = models.PoorPeople.objects.filter(status=True,complete_status=False).order_by('timestamp').count()
-    poor_list_inactive = models.PoorPeople.objects.filter(status=False).order_by('timestamp').count()
-    poor_list_pending = models.PoorPeople.objects.filter(complete_status=False,status=False).order_by('timestamp').count()
-    poor_list_complete = models.PoorPeople.objects.filter(complete_status=True).order_by('timestamp') 
+    poor_list_all = models.Receivers.objects.all().count()
+    poor_list_active = models.Receivers.objects.filter(status=True,complete_status=False).order_by('timestamp').count()
+    poor_list_inactive = models.Receivers.objects.filter(status=False).order_by('timestamp').count()
+    poor_list_pending = models.Receivers.objects.filter(complete_status=False,status=False).order_by('timestamp').count()
+    poor_list_complete = models.Receivers.objects.filter(complete_status=True).order_by('timestamp') 
     total_complete = poor_list_complete.count()
+    
     context = {
         'poor_list_inactive':poor_list_inactive,
         'poor_list_all':poor_list_all,
@@ -178,7 +282,11 @@ def doner_login(request):
     if request.method == 'POST':
         email_phone = request.POST['email_phone'] 
         donner_password = request.POST['donner_password']
-        chk_user = models.Doner.objects.filter(Q(doner_pass = donner_password) & (Q(doner_phone = email_phone) | Q(doner_email = email_phone))).first()
+        # Encrypting the password
+        enc_pass = hashlib.md5(donner_password.encode())
+        doner_pass = enc_pass.hexdigest()
+        chk_user = models.Doner.objects.filter(Q(doner_pass = doner_pass) & (Q(doner_phone = email_phone) | Q(doner_email = email_phone))).first()
+        print(chk_user)
         if chk_user and chk_user.status:
             request.session['userid'] = chk_user.id
             models.DonerLoginHisoty.objects.create(doner_name_id = request.session['userid'], doner_ip=get_client_ip(request))
@@ -188,7 +296,7 @@ def doner_login(request):
             messages.warning(request,"Your Account is temporarly Suspended")
             return redirect('poorapp:doner_login')
         else:
-            messages.error(request, "Ops!! something is wroing")
+            messages.error(request, "Oops!! something went wrong")
     return render(request,'commonapp/doner_login.html')
 
 
@@ -199,7 +307,7 @@ def admin_login(request):
         user = authenticate(username=username,password=password)
         if user is not None:
             request.session['admin'] = 'admin'
-            return redirect('poorapp:admin_dashboard') 
+            return redirect('poorapp:poor_list_all') 
         else:
             messages.error(request,"Username or password is not Correct")
     context = {
@@ -207,9 +315,11 @@ def admin_login(request):
     }
 
     return render(request,'dashboard/admin_login.html',context)
+def admin_logout(request):
+    request.session['admin'] = None
+    return redirect('poorapp:admin_login')
 
 def admin_dashboard(request):
-
     return render(request,'dashboard/admin_dashboard.html')
 def doner_login_history(request,doner_id):
     login_history = models.DonerLoginHisoty.objects.filter(doner_name_id = doner_id)
@@ -221,33 +331,62 @@ def doner_logout(request):
     request.session['userid'] = None
     return redirect('poorapp:doner_login')
 
-
 def doner_register(request):
     if request.method == 'POST':
         doner_name = request.POST['doner_name']
+        doner_gender = request.POST.get('doner_gender')
+        doner_age = request.POST.get('doner_age')
         doner_email = request.POST['doner_email']
         doner_phone = request.POST['doner_phone']
         doner_pass = request.POST['doner_pass']
+        doner_image = request.FILES.get('doner_image')
+        district_id = int(request.POST['district'])
+        city_id = int(request.POST['city_list'])
+        status = request.POST.get('status', False)
+
+        # Encrypting the password
         enc_pass = hashlib.md5(doner_pass.encode())
         doner_pass = enc_pass.hexdigest()
+
+        # Checking for existing phone number or email
         chk_doner_phone = models.Doner.objects.filter(doner_phone=doner_phone).count()
         chk_doner_email = models.Doner.objects.filter(doner_email=doner_email).count()
+
         if chk_doner_phone:
-            messages.warning(request,"This phone number is already used")
+            messages.warning(request, "This phone number is already used")
         elif chk_doner_email:
-            messages.warning(request,"This Email is already used")
+            messages.warning(request, "This Email is already used")
         else:
-            doner = models.Doner.objects.create(doner_name = doner_name, doner_phone= doner_phone, doner_email = doner_email, doner_pass=doner_pass)
-            messages.success(request,"Hi {}, You have successfully Register".format(doner_name))
-            return redirect('poorapp:dashboard')
+            # Creating new doner entry
+            try:
+                doner = models.Doner.objects.create(
+                    doner_name=doner_name,
+                    doner_gender=doner_gender,
+                    doner_age=doner_age,
+                    doner_phone=doner_phone,
+                    doner_email=doner_email,
+                    doner_pass=doner_pass,
+                    doner_image=doner_image,
+                    district_name_id=district_id,
+                    city_name_id=city_id,
+                    status=True,
+                )
+            except Exception as e:
+                print(e)
+                messages.error(request, "Oops!! something went wrong")
+                return redirect('poorapp:doner_register')
+            messages.success(request, "Hi {}, You have successfully registered".format(doner_name))
+            return redirect('poorapp:doner_login')
+
+    # Fetching district and city lists for the form
     doner_district = models.DistrictList.objects.all()
-    doner_city     = models.CityList.objects.all()
+    doner_city = models.CityList.objects.all()
     context = {
-        'doner_district':doner_district,
-        'doner_city':doner_city
+        'doner_district': doner_district,
+        'doner_city': doner_city
     }
 
-    return render(request, 'commonapp/doner_register.html',context)
+    return render(request, 'commonapp/doner_register.html', context)
 
 def get_city_by_ajax(request):
     print("Data founded")
@@ -284,9 +423,11 @@ def doner_payment_search(request, doner_id):
         transaction_num = int(request.POST['transaction_num'])
         payment_by = request.session.userid
 
-    poor_item = models.PoorPeople.objects.all().order_by('require_date')
+    poor_item = models.Receivers.objects.all().order_by('require_date')
+    
     context = {
         'poor_item':poor_item, 
+        'doner_id':doner_id
     }
     return render(request,'dashboard/doner_payment.html',context)
         
@@ -307,7 +448,12 @@ def make_payment(request,poor_id):
         ob = models.PaymentProcess.objects.create(payment_type_id = payment_type, payment_to_id=poor_id, payment_by_id = payment_by, payment_amount = payment_amount)
         ob.payment_to.amount_received = ob.payment_to.amount_received + payment_amount
         ob.payment_to.save()
-        return render(request,'dashboard/make_payment.html')
+        messages.success(request, "You have successfully Paid!!")
+        payment_type = models.PaymentType.objects.filter(status=True)
+        context = {
+        'payment_type':payment_type
+        }
+        return render(request,'dashboard/make_payment.html',context)
     payment_type = models.PaymentType.objects.filter(status=True)
     context = {
         'payment_type':payment_type
@@ -376,7 +522,6 @@ def doner_profile_update(request, doner_id):
             name = request.POST['name']
             email = request.POST['email']
             phone = request.POST['phone']
-            blood = int(request.POST['blood'])
             district = int(request.POST['country'])
             city_name = int(request.POST['city_name'])
             if bool(request.FILES.get('myfile', False)) == True:
@@ -384,18 +529,16 @@ def doner_profile_update(request, doner_id):
                 fs = FileSystemStorage()
                 fname = fs.save(image.name, image)
                 upload_file_url = fs.url(fname)  
-                models.Doner.objects.filter(id = doner_id).update(doner_name=name, blood_groups_id = blood, doner_phone=phone, doner_email = email, district_name_id=district,city_name = city_name, doner_image=image)
+                models.Doner.objects.filter(id = doner_id).update(doner_name=name,doner_phone=phone, doner_email = email, district_name_id=district,city_name = city_name, doner_image=image)
             else: 
-                models.Doner.objects.filter(id = doner_id).update(doner_name=name, blood_groups_id = blood, doner_phone=phone, doner_email = email, district_name_id=district,city_name = city_name)
+                models.Doner.objects.filter(id = doner_id).update(doner_name=name, doner_phone=phone, doner_email = email, district_name_id=district,city_name = city_name)
             messages.success(request,"Profile Updated Successfully ")        
             return redirect('poorapp:doner_dashboard')           
         profile = models.Doner.objects.filter(id=doner_id).first()
-        blood_groups = models.BlodGroup.objects.all()
         district_list = models.DistrictList.objects.all()
         city_lists = models.CityList.objects.all()
         context = {
             'profile':profile,
-            'blood_groups':blood_groups,
             'district_list':district_list,
             'city_lists':city_lists,
         } 
@@ -413,7 +556,7 @@ def bind_country_wise_city(request):
     return render(request, "dashboard/bind_country_wise_city.html", context)
 
 def doner_list(request):
-    doner = models.Doner.objects.all() 
+    doner = models.Doner.objects.all()
     context = {
         'doner':doner
     }

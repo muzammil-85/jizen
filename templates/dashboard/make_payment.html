@@ -29,8 +29,15 @@
                             </tr> 
                         <tr>
                             <td></td>
-                            <td><input type="submit" class="btn btn-success" value="Make Payment"></td>
+                            <td><input type="submit" class="btn btn-success" value="Make Donation"></td>
                         </tr>
+                        {% if messages %}
+                    
+                    {% for message in messages %}
+                        <p style="color: green;">{{message}}</p>
+                    {% endfor %}
+                        
+                {% endif %}
                     </table>
                 </form>
             </div>
@@ -48,9 +55,7 @@
                 if(type == 1){
                     $("#bank").html('<td><label for="bank_account">Bank Account</label></td><td><input type="number" class="form-control" name="bank_account" id="bank_account"></td>');
                 }
-                else if(type == 2){
-                    $("#bank").html('<td><label for="bkash_account">Bkash Account</label></td><td><input type="number" class="form-control" name="bkash_account" id="bkash_account"></td>');
-                }
+                
                 else{
                     $('#bank').html('')
                 }
